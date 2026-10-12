@@ -71,6 +71,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float delayBetweenWords;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float restartTime;
+
 
 	/** Start the morse code */
 	UFUNCTION(BlueprintCallable)
