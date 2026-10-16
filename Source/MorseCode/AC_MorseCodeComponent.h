@@ -34,10 +34,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentStringLength;
 
-	/** The string after it has been encrypted */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FString encryptedString;
-
 	/** Data table holding all the char to morse code information stored as an array of bools */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UDataTable* morseCodeDataTable;
@@ -62,25 +58,29 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	E_EncryptionTypes currrentEncryptionType;
 	
-	//used for timers for the length of time between dots, dashes, when the next blink starts, and when to start the next character.
+	/** The length of time for a dot */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float dotTimeLength;
 
+	/** The length of time for a dash */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float dashTimeLength;
 
+	/** The delay between each blink */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float delayBetweenBlinks;
 
+	/** The delay between characters */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float delayBetweenCharacters;
 
+	/** The delay between each word */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float delayBetweenWords;
 
+	/** The delay for when you've finished the scentance */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float restartTime;
-
 
 	/** Start the morse code */
 	UFUNCTION(BlueprintCallable)

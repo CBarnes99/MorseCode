@@ -45,6 +45,8 @@ void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 		return;
 	}
 
+	SetEncryptionTypeAndString(currrentEncryptionType, currentString);
+
 	StartMorseCodeEvent.ExecuteIfBound();
 
 	GetNextCharacter();
@@ -170,35 +172,37 @@ void UAC_MorseCodeComponent::SetEncryptionTypeAndString(E_EncryptionTypes newEnc
 {
 	currrentEncryptionType = newEncryptionType;
 
-	FString testString;
+	FString encryptedString;
 	switch (currrentEncryptionType)
 	{
-	case E_EncryptionTypes::Encryption1:
-		encryptedString = stringToEncrypt;
-		UE_LOG(LogTemp, Display, TEXT("EncryptString: Encryption 1: stringToEncrypt = %s, Encrypted String = %s"), *stringToEncrypt, *testString);
+	case E_EncryptionTypes::No_Encryption:
+
+		currentString = stringToEncrypt;
+		UE_LOG(LogTemp, Warning, TEXT("EncryptString: No_Encryption: Original = %s, Encrypted = %s"), *stringToEncrypt, *currentString);
 		break;
 
-	case E_EncryptionTypes::Encryption2:
+	case E_EncryptionTypes::Transposition:
 
 		for (int i = 0; i < stringToEncrypt.Len(); i++)
 		{
-			int testIndex = i + 2;
-			if (testIndex >= stringToEncrypt.Len())
+			int newCharIndex = i + 2;
+			if (newCharIndex >= stringToEncrypt.Len())
 			{
-				testIndex -= stringToEncrypt.Len();
+				newCharIndex -= stringToEncrypt.Len();
 			}
 
-			testString.AppendChar(stringToEncrypt[i + 2]);
+			encryptedString.AppendChar(stringToEncrypt[newCharIndex]);
 		}
-		encryptedString = testString;
-		UE_LOG(LogTemp, Display, TEXT("EncryptString: Encryption 2: stringToEncrypt = %s, Encrypted String = %s"), *stringToEncrypt, *testString);
+
+		currentString = encryptedString;
+		UE_LOG(LogTemp, Warning, TEXT("EncryptString: Transposition: Original = %s, Encrypted = %s"), *stringToEncrypt, *currentString);
 		break;
 
-	case E_EncryptionTypes::Encryption3:
+	case E_EncryptionTypes::Reverse:
 
-		encryptedString = stringToEncrypt;
-		UE_LOG(LogTemp, Display, TEXT("EncryptString: Encryption 3: stringToEncrypt = %s, Encrypted String = %s"), *stringToEncrypt, *testString);
-
+		encryptedString = stringToEncrypt.Reverse();
+		currentString = encryptedString;
+		UE_LOG(LogTemp, Warning, TEXT("EncryptString: Reverse: Original = %s, Encrypted = %s"), *stringToEncrypt, *currentString);
 		break;
 
 	}
