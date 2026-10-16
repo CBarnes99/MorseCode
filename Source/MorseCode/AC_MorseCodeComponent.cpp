@@ -14,7 +14,7 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 	delayBetweenWords = dotTimeLength * 7;
 	restartTime = 5.f;
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> morseCodeDataTablePathCheck(TEXT("/Game/DT_MorseCodeTable.DT_MorseCodeTable"));
+	static ConstructorHelpers::FObjectFinder<UDataTable> morseCodeDataTablePathCheck(TEXT("/Game/DataTables/DT_MorseCodeTable.DT_MorseCodeTable"));
 	if (morseCodeDataTablePathCheck.Succeeded())
 	{
 		morseCodeDataTable = morseCodeDataTablePathCheck.Object;
