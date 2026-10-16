@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "MorseCodeActor.h"
-#include "Components/PointLightComponent.h"
 #include "Light_MorseCodeActor.generated.h"
+
+class UPointLightComponent;
 
 UCLASS()
 class MORSECODE_API ALight_MorseCodeActor : public AMorseCodeActor

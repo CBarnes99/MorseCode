@@ -1,5 +1,5 @@
 #include "Light_MorseCodeActor.h"
-
+#include "Components/PointLightComponent.h"
 
 
 void ALight_MorseCodeActor::BeginPlay()

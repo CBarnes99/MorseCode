@@ -18,7 +18,7 @@ void AMorseCodeActor::BeginPlay()
 void AMorseCodeActor::SetMorseCodeInformation()
 {
 	UE_LOG(LogTemp, Display, TEXT("SetMorseCodeInformation: Setting Morse Code Info within - %s"), *this->GetName());
-
+	////////morseCodeComponent->SetEncryptionTypeAndString()
 }
 
 void AMorseCodeActor::StartMorseCode()

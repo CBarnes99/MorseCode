@@ -2,6 +2,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "F_MorseCodeBoolArray.h"
 #include "TimerManager.h"
+#include "Engine/DataTable.h"
 
 UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 {
@@ -24,7 +25,7 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 		UE_LOG(LogTemp, Error, TEXT("UAC_MorseCodeComponent: Morse Code Data Table not set within - %s"), *this->GetName());
 	}
 
-	currentString = "AbC 16G";
+	currentString = "Default Text";
 }
 
 void UAC_MorseCodeComponent::BeginPlay()

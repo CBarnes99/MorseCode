@@ -2,9 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine/DataTable.h"
 #include "E_EncryptionTypes.h"
 #include "AC_MorseCodeComponent.generated.h"
+
+class UDataTable;
 
 DECLARE_DELEGATE(FStartMorseCodeSigniture)
 DECLARE_DELEGATE_TwoParams(FMorseCodeBlinkStartSigniture, float,/* Duration of blink*/ bool /* if dot or dash*/)
