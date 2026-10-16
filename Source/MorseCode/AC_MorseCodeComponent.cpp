@@ -165,3 +165,41 @@ void UAC_MorseCodeComponent::MorseCodeNextCharacterCheck()
 		GetWorld()->GetTimerManager().SetTimer(nextCharacterCheckTimerHandle, this, &UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn, delayBetweenBlinks, false);
 	}
 }
+
+void UAC_MorseCodeComponent::SetEncryptionTypeAndString(E_EncryptionTypes newEncryptionType, FString stringToEncrypt)
+{
+	currrentEncryptionType = newEncryptionType;
+
+	FString testString;
+	switch (currrentEncryptionType)
+	{
+	case E_EncryptionTypes::Encryption1:
+		encryptedString = stringToEncrypt;
+		UE_LOG(LogTemp, Display, TEXT("EncryptString: Encryption 1: stringToEncrypt = %s, Encrypted String = %s"), *stringToEncrypt, *testString);
+		break;
+
+	case E_EncryptionTypes::Encryption2:
+
+		for (int i = 0; i < stringToEncrypt.Len(); i++)
+		{
+			int testIndex = i + 2;
+			if (testIndex >= stringToEncrypt.Len())
+			{
+				testIndex -= stringToEncrypt.Len();
+			}
+
+			testString.AppendChar(stringToEncrypt[i + 2]);
+		}
+		encryptedString = testString;
+		UE_LOG(LogTemp, Display, TEXT("EncryptString: Encryption 2: stringToEncrypt = %s, Encrypted String = %s"), *stringToEncrypt, *testString);
+		break;
+
+	case E_EncryptionTypes::Encryption3:
+
+		encryptedString = stringToEncrypt;
+		UE_LOG(LogTemp, Display, TEXT("EncryptString: Encryption 3: stringToEncrypt = %s, Encrypted String = %s"), *stringToEncrypt, *testString);
+
+		break;
+
+	}
+}

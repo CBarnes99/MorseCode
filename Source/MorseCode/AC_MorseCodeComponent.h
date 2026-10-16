@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/DataTable.h"
+#include "E_EncryptionTypes.h"
 #include "AC_MorseCodeComponent.generated.h"
 
 DECLARE_DELEGATE(FStartMorseCodeSigniture)
@@ -25,8 +26,6 @@ public:
 	FMorseCodeBlinkEndSigniture MorseCodeBlinkEndEvent;
 	FCharacterFinishedSigniture CharacterFinishedEvent;
 
-
-
 	/** The string that will be translated into morse code */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FString currentString;
@@ -34,6 +33,10 @@ public:
 	/** The length of the string thats being converted to morse code */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentStringLength;
+
+	/** The string after it has been encrypted */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString encryptedString;
 
 	/** Data table holding all the char to morse code information stored as an array of bools */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -55,6 +58,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int amountOfFlashesIndex;
 
+	/** The encryption type used for the string*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	E_EncryptionTypes currrentEncryptionType;
+	
 	//used for timers for the length of time between dots, dashes, when the next blink starts, and when to start the next character.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float dotTimeLength;
@@ -99,6 +106,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MorseCodeNextCharacterCheck();
 
+	/** Sets the encryption type, called from another actor. Encrypts the incomming string */
+	UFUNCTION(BlueprintCallable)
+	void SetEncryptionTypeAndString(E_EncryptionTypes newEncryptionType, FString stringToEncrypt);
 
 
 protected:
