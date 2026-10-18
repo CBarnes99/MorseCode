@@ -43,7 +43,7 @@ public:
 	void AddButtonsToArrayAndBindDelegates();
 
 	UFUNCTION(BlueprintCallable)
-	void StartMorseCodeWithinActors(FGameplayTag uniqueMorseCodeTag, bool bIsPressed);
+	void ButtonPressedToggleMorseCode(FGameplayTag uniqueMorseCodeTag, bool bIsPressed);
 
 	UFUNCTION(BlueprintCallable)
 	void SetAllMorseCodeActors();

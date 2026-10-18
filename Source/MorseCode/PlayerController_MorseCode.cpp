@@ -1,9 +1,6 @@
 #include "PlayerController_MorseCode.h"
 #include "PlayerCharacter.h"
 #include "EnhancedInputComponent.h"
-//#include "InputMappingContext.h"
-//#include <EnhancedInputLibrary.h>
-//#include "DrawDebugHelpers.h"
 #include "Camera/CameraComponent.h"
 
 void APlayerController_MorseCode::BeginPlay()
@@ -44,15 +41,7 @@ void APlayerController_MorseCode::Move(const FInputActionValue& InputValue)
 {
 	if (IsValid(playerCharacter))
 	{
-		playerCharacter->Move(InputValue);
-
-		//const FVector2D MovementVector = InputValue.Get<FVector2D>();
-		//const FVector Forward = playerCharacter->GetActorForwardVector();
-		//const FVector Right = playerCharacter->GetActorRightVector();
-
-		//playerCharacter->AddMovementInput(Forward, MovementVector.Y);
-		//playerCharacter->AddMovementInput(Right, MovementVector.X);
-		
+		playerCharacter->Move(InputValue);		
 	}
 	else
 	{
@@ -65,10 +54,6 @@ void APlayerController_MorseCode::Look(const FInputActionValue& InputValue)
 	if (IsValid(playerCharacter))
 	{
 		playerCharacter->Look(InputValue);
-
-		//const FVector2D LookAxisVector = InputValue.Get<FVector2D>();
-		//playerCharacter->AddControllerPitchInput(-LookAxisVector.Y);
-		//playerCharacter->AddControllerYawInput(LookAxisVector.X);
 	}
 	else
 	{
@@ -82,26 +67,6 @@ void APlayerController_MorseCode::Click()
 	if (IsValid(playerCharacter))
 	{
 		playerCharacter->Click();
-
-		//FHitResult hit;
-		//FVector traceStartLoc = playerCharacter->GetPlayerCamera()->GetComponentLocation();
-		//FVector traceEndLoc = traceStartLoc + (playerCharacter->GetPlayerCamera()->GetForwardVector() * 200.f);
-
-		//FCollisionQueryParams params;
-		//params.AddIgnoredActor(playerCharacter);
-
-		//GetWorld()->LineTraceSingleByChannel(hit, traceStartLoc, traceEndLoc, ECC_Visibility, params);
-		//DrawDebugLine(GetWorld(), traceStartLoc, traceEndLoc, FColor::Red, false, 2.f, 1.f);
-
-		//if (hit.bBlockingHit == true)
-		//{
-		//	UE_LOG(LogTemp, Warning, TEXT("Click: Trace Hit - %s"), *hit.GetActor()->GetName());
-		//}
-		//else
-		//{
-		//	UE_LOG(LogTemp, Warning, TEXT("Click: No Actor Hit"));
-		//}
-
 	}
 	else
 	{

@@ -10,11 +10,11 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 
 	dotTimeLength = 0.3f;
 	dashTimeLength = dotTimeLength * 3;
-	delayBetweenBlinks = dotTimeLength;
+	delayBetweenFlashes = dotTimeLength;
 	delayBetweenCharacters = dotTimeLength * 3;
 	delayBetweenWords = dotTimeLength * 7;
 	restartTime = 5.f;
-	delayToStartMorrseCode = 1.f;
+	delayToStartMorseCode = 1.f;
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> morseCodeDataTablePathCheck(TEXT("/Game/DataTables/DT_MorseCodeTable.DT_MorseCodeTable"));
 	if (morseCodeDataTablePathCheck.Succeeded())
@@ -52,7 +52,7 @@ void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 
 	StartedMorseCodeEvent.ExecuteIfBound();
 
-	GetWorld()->GetTimerManager().SetTimer(startMorseCodeDelayTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, delayToStartMorrseCode, false);
+	GetWorld()->GetTimerManager().SetTimer(startMorseCodeDelayTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, delayToStartMorseCode, false);
 }
 
 void UAC_MorseCodeComponent::StopMorseCode(AActor* actorStoppingMorseCode)
@@ -175,7 +175,7 @@ void UAC_MorseCodeComponent::MorseCodeNextCharacterCheck()
 	}
 	else
 	{
-		GetWorld()->GetTimerManager().SetTimer(nextCharacterCheckTimerHandle, this, &UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn, delayBetweenBlinks, false);
+		GetWorld()->GetTimerManager().SetTimer(nextCharacterCheckTimerHandle, this, &UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn, delayBetweenFlashes, false);
 	}
 }
 

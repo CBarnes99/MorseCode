@@ -33,6 +33,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
 	FString currentString;
 
+	/** The encryption type used for the string*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	E_EncryptionTypes currrentEncryptionType;
+
 	/** The length of the string thats being converted to morse code */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	int currentStringLength;
@@ -56,10 +60,6 @@ public:
 	/** To keep track of how many times the a dot or dash has been displayed, used to check if the morse code for an char has all been shown */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	int amountOfFlashesIndex;
-
-	/** The encryption type used for the string*/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
-	E_EncryptionTypes currrentEncryptionType;
 	
 	/** The length of time for a dot */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
@@ -71,11 +71,11 @@ public:
 
 	/** The delay to start Morse Code */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
-	float delayToStartMorrseCode;
+	float delayToStartMorseCode;
 
 	/** The delay between each blink */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
-	float delayBetweenBlinks;
+	float delayBetweenFlashes;
 
 	/** The delay between characters */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
@@ -88,6 +88,10 @@ public:
 	/** The delay for when you've finished the scentance */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float restartTime;
+
+	/** Sets the encryption type, called from another actor. Encrypts the incomming string */
+	UFUNCTION(BlueprintCallable)
+	void SetEncryptionTypeAndString(E_EncryptionTypes newEncryptionType, FString stringToEncrypt);
 
 	/** Starts the morse code */
 	UFUNCTION(BlueprintCallable)
@@ -116,11 +120,6 @@ public:
 	/** Checks to see if the you're at the end of the string */
 	UFUNCTION(BlueprintCallable)
 	void MorseCodeNextCharacterCheck();
-
-	/** Sets the encryption type, called from another actor. Encrypts the incomming string */
-	UFUNCTION(BlueprintCallable)
-	void SetEncryptionTypeAndString(E_EncryptionTypes newEncryptionType, FString stringToEncrypt);
-
 
 protected:
 

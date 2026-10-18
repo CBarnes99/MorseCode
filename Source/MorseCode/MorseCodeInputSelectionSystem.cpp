@@ -65,17 +65,17 @@ void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
 
 	for (ASelectionButton* button : buttonArray)
 	{
-		button->ButtonPressedEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::StartMorseCodeWithinActors);
+		button->ButtonPressedEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode);
 	}
 }
 
-void AMorseCodeInputSelectionSystem::StartMorseCodeWithinActors(FGameplayTag uniqueMorseCodeTag, bool bIsPressed)
+void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(FGameplayTag uniqueMorseCodeTag, bool bIsPressed)
 {
 	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
 	{
 		if (morseCodeActor->uniqueActorTag == uniqueMorseCodeTag)
 		{
-			UE_LOG(LogTemp, Display, TEXT("StartMorseCodeWithinActors: Correct Tag witin %s"), *morseCodeActor->GetName());
+			UE_LOG(LogTemp, Display, TEXT("ButtonPressedToggleMorseCode: Correct Tag witin %s"), *morseCodeActor->GetName());
 			morseCodeActor->StartStopMorseCode(bIsPressed);
 			break;
 		}
