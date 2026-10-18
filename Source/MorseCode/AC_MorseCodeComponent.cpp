@@ -14,6 +14,7 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 	delayBetweenCharacters = dotTimeLength * 3;
 	delayBetweenWords = dotTimeLength * 7;
 	restartTime = 5.f;
+	delayToStartMorrseCode = 1.f;
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> morseCodeDataTablePathCheck(TEXT("/Game/DataTables/DT_MorseCodeTable.DT_MorseCodeTable"));
 	if (morseCodeDataTablePathCheck.Succeeded())
@@ -46,11 +47,20 @@ void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 		return;
 	}
 
+	///////////////////Need to get encryption and string from data table
 	SetEncryptionTypeAndString(currrentEncryptionType, currentString);
 
-	StartMorseCodeEvent.ExecuteIfBound();
+	StartedMorseCodeEvent.ExecuteIfBound();
 
-	GetNextCharacter();
+	GetWorld()->GetTimerManager().SetTimer(startMorseCodeDelayTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, delayToStartMorrseCode, false);
+}
+
+void UAC_MorseCodeComponent::StopMorseCode(AActor* actorStoppingMorseCode)
+{
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+	ResetMorseCode(false);
+	MorseCodeStoppedEvent.ExecuteIfBound();
+	UE_LOG(LogTemp, Display, TEXT("StopMorseCode: MorseCode has stopped for - %s"), *actorStoppingMorseCode->GetName());
 }
 
 void UAC_MorseCodeComponent::ResetMorseCode(bool bHaveDelay)

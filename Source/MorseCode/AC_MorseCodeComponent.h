@@ -7,10 +7,11 @@
 
 class UDataTable;
 
-DECLARE_DELEGATE(FStartMorseCodeSigniture)
+DECLARE_DELEGATE(FStartedMorseCodeSigniture)
 DECLARE_DELEGATE_TwoParams(FMorseCodeBlinkStartSigniture, float,/* Duration of blink*/ bool /* if dot or dash*/)
 DECLARE_DELEGATE(FMorseCodeBlinkEndSigniture)
 DECLARE_DELEGATE(FCharacterFinishedSigniture)
+DECLARE_DELEGATE(FMorseCodeStoppedSigniture)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MORSECODE_API UAC_MorseCodeComponent : public UActorComponent
@@ -22,70 +23,79 @@ public:
 	UAC_MorseCodeComponent();
 
 	//Delegate Signitures
-	FStartMorseCodeSigniture StartMorseCodeEvent;
+	FStartedMorseCodeSigniture StartedMorseCodeEvent;
 	FMorseCodeBlinkStartSigniture MorseCodeBlinkStartEvent;
 	FMorseCodeBlinkEndSigniture MorseCodeBlinkEndEvent;
 	FCharacterFinishedSigniture CharacterFinishedEvent;
+	FMorseCodeStoppedSigniture MorseCodeStoppedEvent;
 
 	/** The string that will be translated into morse code */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
 	FString currentString;
 
 	/** The length of the string thats being converted to morse code */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	int currentStringLength;
 
 	/** Data table holding all the char to morse code information stored as an array of bools */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
 	UDataTable* morseCodeDataTable;
 
 	/** The index for the string for what char to show in morse code */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	int charIndex;
 
 	/** This is from the morse code data table */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	TArray<bool> morseCodeForSingleCharacterArray;
 
 	/** How long each character is on a delay for to turn off */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	TArray<float> morseCodeLightOnDelay;
 
 	/** To keep track of how many times the a dot or dash has been displayed, used to check if the morse code for an char has all been shown */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	int amountOfFlashesIndex;
 
 	/** The encryption type used for the string*/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
 	E_EncryptionTypes currrentEncryptionType;
 	
 	/** The length of time for a dot */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
 	float dotTimeLength;
 
 	/** The length of time for a dash */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
 	float dashTimeLength;
 
+	/** The delay to start Morse Code */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	float delayToStartMorrseCode;
+
 	/** The delay between each blink */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
 	float delayBetweenBlinks;
 
 	/** The delay between characters */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
 	float delayBetweenCharacters;
 
 	/** The delay between each word */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
 	float delayBetweenWords;
 
 	/** The delay for when you've finished the scentance */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float restartTime;
 
-	/** Start the morse code */
+	/** Starts the morse code */
 	UFUNCTION(BlueprintCallable)
 	void StartMorseCode(AActor* actorStartingMorseCode);
+
+	/** Stops the morse code */
+	UFUNCTION(BlueprintCallable)
+	void StopMorseCode(AActor* actorStoppingMorseCode);
 
 	/** When the entire string of characters is finished, call the reset */
 	UFUNCTION(BlueprintCallable)
@@ -116,6 +126,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	FTimerHandle startMorseCodeDelayTimerHandle;
 	FTimerHandle characterBlinkOnTimerHandle;
 	FTimerHandle resetMorseCodeTimerHandle;
 	FTimerHandle delayForNextBlinkTimerHandle;

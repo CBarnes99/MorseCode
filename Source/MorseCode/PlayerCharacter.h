@@ -15,9 +15,6 @@ class MORSECODE_API APlayerCharacter : public ACharacter
 public:
 	APlayerCharacter();
 
-	//UFUNCTION(BlueprintCallable)
-	//UCameraComponent* GetPlayerCamera();
-
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& InputValue);
 

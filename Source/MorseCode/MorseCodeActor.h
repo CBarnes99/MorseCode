@@ -25,13 +25,19 @@ public:
 	void SetMorseCodeInformation();
 
 	UFUNCTION(BlueprintCallable)
-	void StartMorseCode();
+	void StartStopMorseCode(bool bStartMorseCode);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void MorseCodeEnded();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void MorseCodeOn(float duration, bool bIsDot);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void MorseCodeOff();
+
+
+
 
 
 protected:

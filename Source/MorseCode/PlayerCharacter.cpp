@@ -4,6 +4,7 @@
 #include "InputMappingContext.h"
 #include <EnhancedInputLibrary.h>
 #include "DrawDebugHelpers.h"
+#include "I_Interactable.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -20,11 +21,6 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
-
-//UCameraComponent* APlayerCharacter::GetPlayerCamera()
-//{
-//	return playerCamera;
-//}
 
 void APlayerCharacter::Move(const FInputActionValue& InputValue)
 {
@@ -59,6 +55,14 @@ void APlayerCharacter::Click()
 	if (hit.bBlockingHit == true)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Click: Trace Hit - %s"), *hit.GetActor()->GetName());
+
+		if (hit.GetActor()->Implements<UI_Interactable>())
+		{
+			II_Interactable* interactableActor = Cast<II_Interactable>(hit.GetActor());
+			interactableActor->Interact(this);
+		}
+
+
 	}
 	else
 	{

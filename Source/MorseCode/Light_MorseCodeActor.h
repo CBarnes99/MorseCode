@@ -22,6 +22,8 @@ public:
 
 	virtual void MorseCodeOff() override;
 
+	virtual void MorseCodeEnded() override;
+
 protected:
 
 	virtual void BeginPlay() override;

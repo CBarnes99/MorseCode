@@ -8,6 +8,7 @@ AMorseCodeActor::AMorseCodeActor()
 
 	morseCodeComponent->MorseCodeBlinkStartEvent.BindUObject(this, &AMorseCodeActor::MorseCodeOn);
 	morseCodeComponent->MorseCodeBlinkEndEvent.BindUObject(this, &AMorseCodeActor::MorseCodeOff);
+	morseCodeComponent->MorseCodeStoppedEvent.BindUObject(this, &AMorseCodeActor::MorseCodeEnded);
 }
 
 void AMorseCodeActor::BeginPlay()
@@ -21,10 +22,21 @@ void AMorseCodeActor::SetMorseCodeInformation()
 	////////morseCodeComponent->SetEncryptionTypeAndString()
 }
 
-void AMorseCodeActor::StartMorseCode()
+void AMorseCodeActor::StartStopMorseCode(bool bStartMorseCode)
 {
-	UE_LOG(LogTemp, Display, TEXT("StartMorseCode: Morse Code has started within - %s"), *this->GetName());
-	morseCodeComponent->StartMorseCode(this);
+	if (bStartMorseCode == true)
+	{
+		morseCodeComponent->StartMorseCode(this);
+	}
+	else
+	{
+		morseCodeComponent->StopMorseCode(this);
+	}
+}
+
+void AMorseCodeActor::MorseCodeEnded()
+{
+	UE_LOG(LogTemp, Display, TEXT("MorseCodeEnded: OVERRIDE FUNCTION within - %s"), *this->GetName());
 }
 
 void AMorseCodeActor::MorseCodeOn(float duration, bool bIsDot)
@@ -36,4 +48,5 @@ void AMorseCodeActor::MorseCodeOff()
 {
 	UE_LOG(LogTemp, Display, TEXT("MorseCodeOff: OVERRIDE FUNCTION within - %s"), *this->GetName());
 }
+
 
