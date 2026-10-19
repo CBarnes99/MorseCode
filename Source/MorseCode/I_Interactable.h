@@ -19,7 +19,6 @@ class II_Interactable
 	
 public:
 
-	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interaction")
 	virtual void Interact(AActor* interactor) = 0;
 
 };

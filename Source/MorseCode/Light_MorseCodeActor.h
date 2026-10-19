@@ -15,6 +15,7 @@ public:
 
 	ALight_MorseCodeActor();
 
+	/** The light that turns on and off */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UPointLightComponent* morseCodeLight;
 

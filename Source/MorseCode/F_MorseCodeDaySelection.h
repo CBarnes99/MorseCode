@@ -12,6 +12,7 @@ struct F_MorseCodeDaySelection : public FTableRowBase
 
 public:
 	
+	/** A data table that holds the morse code informtaion for the in game day */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* uniqueDaysMorseCodeData;
 

@@ -50,7 +50,7 @@ void APlayerCharacter::Click()
 	params.AddIgnoredActor(this);
 
 	GetWorld()->LineTraceSingleByChannel(hit, traceStartLoc, traceEndLoc, ECC_Visibility, params);
-	DrawDebugLine(GetWorld(), traceStartLoc, traceEndLoc, FColor::Red, false, 2.f, 1.f);
+	DrawDebugLine(GetWorld(), traceStartLoc, traceEndLoc, FColor::Red, false, 2.f, 1.f, .1f);
 
 	if (hit.bBlockingHit == true)
 	{
@@ -61,8 +61,6 @@ void APlayerCharacter::Click()
 			II_Interactable* interactableActor = Cast<II_Interactable>(hit.GetActor());
 			interactableActor->Interact(this);
 		}
-
-
 	}
 	else
 	{

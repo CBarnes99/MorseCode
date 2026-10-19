@@ -19,19 +19,33 @@ public:
 
 	ASelectionButton();
 
+	/** When the button is pressed, execute this delegate */
 	FButtonPressedSigniture ButtonPressedEvent;
 
+	/** Main mesh for the button */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* buttonBox;
 
+	/** The gameplay tag that corrisponds to the morse code actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
 	FGameplayTag morseCodeActorUniqueTag;
 
+	/** A check to see if the button is pressed in or not */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	bool bIsPressed;
 
-
+	/** A check for if the button is presseable or not, updated by the Input Selection System */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	bool bIsEnabled;
+	
+	/** When interact is called but the player, presses button and calls ButtonPressedEvent */
 	virtual void Interact(AActor* interactor) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetButtonToEnabled();
+
+	UFUNCTION(BlueprintCallable)
+	void SetButtonToDisabled();
 
 
 protected:

@@ -103,7 +103,7 @@ public:
 
 	/** When the entire string of characters is finished, call the reset */
 	UFUNCTION(BlueprintCallable)
-	void ResetMorseCode(bool bHaveDelay);
+	void ResetMorseCode(bool bRestartAfterReset);
 
 	/** Gets all the information needed for the next character */
 	UFUNCTION(BlueprintCallable)

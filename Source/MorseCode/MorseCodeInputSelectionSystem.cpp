@@ -29,6 +29,8 @@ AMorseCodeInputSelectionSystem::AMorseCodeInputSelectionSystem()
 	if (meshFinder.Succeeded())
 	{
 		baseMesh->SetStaticMesh(meshFinder.Object);
+		UE_LOG(LogTemp, Display, TEXT("AMorseCodeInputSelectionSystem: Static Mesh is set within - %s"), *this->GetName());
+
 	}
 	else
 	{
@@ -80,4 +82,33 @@ void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(FGameplayTag u
 			break;
 		}
 	}
+}
+
+void AMorseCodeInputSelectionSystem::EnableButtonAndSetMorseCodeActorInformation(F_MorseCodeStringsAndEncryption& morseCodeData)
+{
+	//For debugging
+	FString buttonName = "Not Set";
+	FString morseCodeActorName = "Not Set";
+
+	for (ASelectionButton* button : buttonArray)
+	{
+		if (button->morseCodeActorUniqueTag == morseCodeData.uniqueTagForMorseCodeActor)
+		{
+			button->SetButtonToEnabled();
+			buttonName = button->GetName();
+			break;
+		}
+	}
+	
+	for (AMorseCodeActor* actor : morseCodeActorsArray)
+	{
+		if (actor->uniqueActorTag == morseCodeData.uniqueTagForMorseCodeActor)
+		{
+			actor->SetMorseCodeInformation(morseCodeData.encryptionType, morseCodeData.sentenceToDecode);
+			morseCodeActorName = actor->GetName();
+			break;
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("EnableButtonAndSetMorseCodeActorInformation: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
 }

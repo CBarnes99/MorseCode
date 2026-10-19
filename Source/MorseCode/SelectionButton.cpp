@@ -9,6 +9,7 @@ ASelectionButton::ASelectionButton()
 	buttonBox->SetupAttachment(GetRootComponent());
 
 	bIsPressed = false;
+	bIsEnabled = false;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshFinder(TEXT("/Game/Testing/SM_Cube.SM_Cube"));
 	if (meshFinder.Succeeded())
@@ -31,6 +32,12 @@ void ASelectionButton::BeginPlay()
 void ASelectionButton::Interact(AActor* interactor)
 {
 
+	if (bIsEnabled == false)
+	{
+		UE_LOG(LogTemp, Display, TEXT("Interact: Button - %s - Is Not Enabled!"), *GetName());
+		return;
+	}
+
 	if (bIsPressed == true)
 	{
 		bIsPressed = false;
@@ -51,4 +58,17 @@ void ASelectionButton::Interact(AActor* interactor)
 	{
 		UE_LOG(LogTemp, Display, TEXT("Interact: ButtonPressedEvent is not bound within - %s"), *GetName());
 	}
+}
+
+void ASelectionButton::SetButtonToDisabled()
+{
+	bIsEnabled = false;
+	UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Disabled"), *GetName());
+
+}
+
+void ASelectionButton::SetButtonToEnabled()
+{
+	bIsEnabled = true;
+	UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Enabled"), *GetName());
 }

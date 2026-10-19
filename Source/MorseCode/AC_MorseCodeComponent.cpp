@@ -47,9 +47,6 @@ void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 		return;
 	}
 
-	///////////////////Need to get encryption and string from data table
-	SetEncryptionTypeAndString(currrentEncryptionType, currentString);
-
 	StartedMorseCodeEvent.ExecuteIfBound();
 
 	GetWorld()->GetTimerManager().SetTimer(startMorseCodeDelayTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, delayToStartMorseCode, false);
@@ -63,13 +60,13 @@ void UAC_MorseCodeComponent::StopMorseCode(AActor* actorStoppingMorseCode)
 	UE_LOG(LogTemp, Display, TEXT("StopMorseCode: MorseCode has stopped for - %s"), *actorStoppingMorseCode->GetName());
 }
 
-void UAC_MorseCodeComponent::ResetMorseCode(bool bHaveDelay)
+void UAC_MorseCodeComponent::ResetMorseCode(bool bRestartAfterReset)
 {
 	charIndex = -1;
 	amountOfFlashesIndex = 0;
 	currentStringLength = currentString.Len() - 1;
 
-	if (bHaveDelay)
+	if (bRestartAfterReset)
 	{
 		GetWorld()->GetTimerManager().SetTimer(resetMorseCodeTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, restartTime, false);
 	}
@@ -110,9 +107,8 @@ void UAC_MorseCodeComponent::GetNextCharacter()
 		return;
 	}
 
-
+	//Gets the Morse Code bools and add the corrisponding dot and dash time length to the morseCodeLightOnDelay array
 	F_MorseCodeBoolArray* morseCodeData = morseCodeDataTable->FindRow<F_MorseCodeBoolArray>(rowKey, TEXT("Morse Code Lookup"));
-
 	if (morseCodeData)
 	{
 		morseCodeForSingleCharacterArray = morseCodeData->MorseCodeArray;
