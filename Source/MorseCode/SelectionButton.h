@@ -24,7 +24,17 @@ public:
 
 	/** Main mesh for the button */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* buttonBox;
+	UStaticMeshComponent* buttonMesh;
+
+	/** The mesh for the light to indicate if the button is enabled */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* lightMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UDataTable* materialsDataTable;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UMaterialInstance* currentMaterial;
 
 	/** The gameplay tag that corrisponds to the morse code actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
@@ -46,6 +56,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetButtonToDisabled();
+
+	UFUNCTION(BlueprintCallable)
+	void ButtonPressed();
+
+	UFUNCTION(BlueprintCallable)
+	void SetLightMaterial(FName dataTableName);
 
 
 protected:
