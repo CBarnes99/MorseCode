@@ -46,9 +46,6 @@ void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 		UE_LOG(LogTemp, Error, TEXT("StartMorseCode: Morse Code Table is NULL!"));
 		return;
 	}
-
-	currentStringLength = currentString.Len() - 1;
-
 	StartedMorseCodeEvent.ExecuteIfBound();
 
 	GetWorld()->GetTimerManager().SetTimer(startMorseCodeDelayTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, delayToStartMorseCode, false);
@@ -216,4 +213,6 @@ void UAC_MorseCodeComponent::SetEncryptionTypeAndString(E_EncryptionTypes newEnc
 		break;
 
 	}
+
+	currentStringLength = currentString.Len() - 1;
 }
