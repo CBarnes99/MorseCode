@@ -10,11 +10,13 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 
 	dotTimeLength = 0.3f;
 	dashTimeLength = dotTimeLength * 3;
-	delayBetweenFlashes = dotTimeLength;
+	delayBetweenDotsAndDashes = dotTimeLength;
 	delayBetweenCharacters = dotTimeLength * 3;
 	delayBetweenWords = dotTimeLength * 7;
 	restartTime = 5.f;
 	delayToStartMorseCode = 1.f;
+
+	charIndex = -1;
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> morseCodeDataTablePathCheck(TEXT("/Game/DataTables/DT_MorseCodeTable.DT_MorseCodeTable"));
 	if (morseCodeDataTablePathCheck.Succeeded())
@@ -73,8 +75,6 @@ void UAC_MorseCodeComponent::ResetMorseCode(bool bRestartAfterReset)
 void UAC_MorseCodeComponent::GetNextCharacter()
 {
 	charIndex++;
-
-	UE_LOG(LogTemp, Warning, TEXT("GetNextCharacter: CHAR INDEX - %d, String Length - %d"), charIndex, currentStringLength);
 
 	//If you have reached the end of the string, reset and restart
 	if (charIndex > currentStringLength)
@@ -138,14 +138,14 @@ void UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn()
 {
 
 	//Just to log if the current character is a dot or a dash
-	//if (morseCodeForSingleCharacterArray[amountOfFlashesIndex] == true)
-	//{
-	//	UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DOT"));
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DASH"));
-	//}
+	if (morseCodeForSingleCharacterArray[amountOfFlashesIndex] == true)
+	{
+		UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DOT"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DASH"));
+	}
 
 	MorseCodeBlinkStartEvent.ExecuteIfBound(morseCodeLightOnDelay[amountOfFlashesIndex], morseCodeForSingleCharacterArray[amountOfFlashesIndex]);
 
@@ -171,7 +171,7 @@ void UAC_MorseCodeComponent::MorseCodeNextCharacterCheck()
 	}
 	else
 	{
-		GetWorld()->GetTimerManager().SetTimer(nextCharacterCheckTimerHandle, this, &UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn, delayBetweenFlashes, false);
+		GetWorld()->GetTimerManager().SetTimer(nextCharacterCheckTimerHandle, this, &UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn, delayBetweenDotsAndDashes, false);
 	}
 }
 
@@ -215,4 +215,23 @@ void UAC_MorseCodeComponent::SetEncryptionTypeAndString(E_EncryptionTypes newEnc
 	}
 
 	currentStringLength = currentString.Len() - 1;
+}
+
+void UAC_MorseCodeComponent::SetDotDashTimes(float dot, float dash, float delayBetweenDotAndDash, float delayBetweenChars, float delayBetweenEachWord)
+{
+		
+	if (dot > 0.1f)
+		dotTimeLength = dot;
+
+	if (dash > 0.1f)
+		dashTimeLength = dash;
+
+	if (delayBetweenDotsAndDashes > 0.1f)
+		delayBetweenDotsAndDashes = delayBetweenDotAndDash;
+	
+	if (delayBetweenChars > 0.1f)
+		delayBetweenCharacters = delayBetweenChars;
+		
+	if (delayBetweenWords > 0.1)
+		delayBetweenWords = delayBetweenEachWord;
 }

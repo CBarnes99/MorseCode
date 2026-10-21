@@ -30,11 +30,11 @@ public:
 	FMorseCodeStoppedSigniture MorseCodeStoppedEvent;
 
 	/** The string that will be translated into morse code */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	FString currentString;
 
 	/** The encryption type used for the string*/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	E_EncryptionTypes currrentEncryptionType;
 
 	/** The length of the string thats being converted to morse code */
@@ -42,7 +42,7 @@ public:
 	int currentStringLength;
 
 	/** Data table holding all the char to morse code information stored as an array of bools */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	UDataTable* morseCodeDataTable;
 
 	/** The index for the string for what char to show in morse code */
@@ -62,36 +62,47 @@ public:
 	int amountOfFlashesIndex;
 	
 	/** The length of time for a dot */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	float dotTimeLength;
 
 	/** The length of time for a dash */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	float dashTimeLength;
 
 	/** The delay to start Morse Code */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	float delayToStartMorseCode;
 
 	/** The delay between each blink */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
-	float delayBetweenFlashes;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	float delayBetweenDotsAndDashes;
 
 	/** The delay between characters */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	float delayBetweenCharacters;
 
 	/** The delay between each word */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MorseCode")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	float delayBetweenWords;
 
 	/** The delay for when you've finished the scentance */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float restartTime;
 
 	/** Sets the encryption type, called from another actor. Encrypts the incomming string */
 	UFUNCTION(BlueprintCallable)
 	void SetEncryptionTypeAndString(E_EncryptionTypes newEncryptionType, FString stringToEncrypt);
+
+	/** 
+		Setting the timings for the dots and dashes.
+		@param dot Time for how long the dot is played for, as float
+		@param dash Time for how long the dash is played for, as float
+		@param delayBetweenDotsAndDashes The delay between one dot to the next, as float
+		@param delayBetweenChars The delay from the character to the next, as float
+		@param delayBetweenWords The delay between words, as float
+	*/
+	UFUNCTION(BlueprintCallable)
+	void SetDotDashTimes(float dot, float dash, float delayBetweenDotAndDash, float delayBetweenChars, float delayBetweenEachWord);
 
 	/** Starts the morse code */
 	UFUNCTION(BlueprintCallable)
