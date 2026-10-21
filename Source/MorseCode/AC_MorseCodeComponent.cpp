@@ -26,7 +26,7 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 		UE_LOG(LogTemp, Error, TEXT("UAC_MorseCodeComponent: Morse Code Data Table not set within - %s"), *this->GetName());
 	}
 
-	currentString = "Default Text";
+	currentString = "Not Set";
 }
 
 void UAC_MorseCodeComponent::BeginPlay()
@@ -47,6 +47,8 @@ void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 		return;
 	}
 
+	currentStringLength = currentString.Len() - 1;
+
 	StartedMorseCodeEvent.ExecuteIfBound();
 
 	GetWorld()->GetTimerManager().SetTimer(startMorseCodeDelayTimerHandle, this, &UAC_MorseCodeComponent::GetNextCharacter, delayToStartMorseCode, false);
@@ -64,7 +66,6 @@ void UAC_MorseCodeComponent::ResetMorseCode(bool bRestartAfterReset)
 {
 	charIndex = -1;
 	amountOfFlashesIndex = 0;
-	currentStringLength = currentString.Len() - 1;
 
 	if (bRestartAfterReset)
 	{
@@ -76,10 +77,12 @@ void UAC_MorseCodeComponent::GetNextCharacter()
 {
 	charIndex++;
 
+	UE_LOG(LogTemp, Warning, TEXT("GetNextCharacter: CHAR INDEX - %d, String Length - %d"), charIndex, currentStringLength);
+
 	//If you have reached the end of the string, reset and restart
 	if (charIndex > currentStringLength)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GetNextCharacter: CHAR INDEX > CURRENT STRING LENGTH, RESETTING AND RESTARTING"));
+		UE_LOG(LogTemp, Warning, TEXT("GetNextCharacter: CHAR INDEX >= CURRENT STRING LENGTH, RESETTING AND RESTARTING"));
 		
 		ResetMorseCode(true);
 		return;
@@ -138,14 +141,14 @@ void UAC_MorseCodeComponent::MorseCodeCharacterBlinksOn()
 {
 
 	//Just to log if the current character is a dot or a dash
-	if (morseCodeForSingleCharacterArray[amountOfFlashesIndex] == true)
-	{
-		UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DOT"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DASH"));
-	}
+	//if (morseCodeForSingleCharacterArray[amountOfFlashesIndex] == true)
+	//{
+	//	UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DOT"));
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Display, TEXT("MorseCodeCharacterBlinks: DASH"));
+	//}
 
 	MorseCodeBlinkStartEvent.ExecuteIfBound(morseCodeLightOnDelay[amountOfFlashesIndex], morseCodeForSingleCharacterArray[amountOfFlashesIndex]);
 
