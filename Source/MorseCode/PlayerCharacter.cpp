@@ -56,10 +56,18 @@ void APlayerCharacter::Click()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Click: Trace Hit - %s"), *hit.GetActor()->GetName());
 
+		//if (hit.GetActor()->Implements<UI_Interactable>())
+		//{
+		//	II_Interactable* interactableActor = Cast<II_Interactable>(hit.GetActor());
+		//	interactableActor->Interact(this);
+		//	return;
+		//}
+
+		//For testing with blueprints
 		if (hit.GetActor()->Implements<UI_Interactable>())
 		{
-			II_Interactable* interactableActor = Cast<II_Interactable>(hit.GetActor());
-			interactableActor->Interact(this);
+			II_Interactable::Execute_BPInteract(hit.GetActor(), this);
+			return;
 		}
 	}
 	else

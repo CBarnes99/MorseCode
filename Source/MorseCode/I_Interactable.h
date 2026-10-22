@@ -18,7 +18,10 @@ class II_Interactable
 
 	
 public:
-
+	
 	virtual void Interact(AActor* interactor) = 0;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void BPInteract(AActor* interactor);
 
 };
