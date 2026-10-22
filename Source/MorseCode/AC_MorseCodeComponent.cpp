@@ -216,22 +216,3 @@ void UAC_MorseCodeComponent::SetEncryptionTypeAndString(E_EncryptionTypes newEnc
 
 	currentStringLength = currentString.Len() - 1;
 }
-
-void UAC_MorseCodeComponent::SetDotDashTimes(float dot, float dash, float delayBetweenDotAndDash, float delayBetweenChars, float delayBetweenEachWord)
-{
-		
-	if (dot > 0.1f)
-		dotTimeLength = dot;
-
-	if (dash > 0.1f)
-		dashTimeLength = dash;
-
-	if (delayBetweenDotsAndDashes > 0.1f)
-		delayBetweenDotsAndDashes = delayBetweenDotAndDash;
-	
-	if (delayBetweenChars > 0.1f)
-		delayBetweenCharacters = delayBetweenChars;
-		
-	if (delayBetweenWords > 0.1)
-		delayBetweenWords = delayBetweenEachWord;
-}

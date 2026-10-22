@@ -36,14 +36,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UChildActorComponent* buttonComponent3;
 
-	/** An array of all the button actors */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	TArray<ASelectionButton*> buttonArray;
-
-	/** An array of all the morse code actors */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	TArray<AMorseCodeActor*> morseCodeActorsArray;
-
 	/** When button pressed, toggle morse code actor on or off */
 	UFUNCTION(BlueprintCallable)
 	void ButtonPressedToggleMorseCode(FGameplayTag uniqueMorseCodeTag, bool bIsPressed);
@@ -54,6 +46,14 @@ public:
 
 protected:
 	
+	/** An array of all the button actors */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	TArray<ASelectionButton*> buttonArray;
+
+	/** An array of all the morse code actors */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	TArray<AMorseCodeActor*> morseCodeActorsArray;
+
 	UFUNCTION(BlueprintCallable)
 	void AddButtonsToArrayAndBindDelegates();
 

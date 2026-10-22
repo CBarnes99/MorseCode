@@ -26,8 +26,6 @@ void AAudio_MorseCodeActor::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("BeginPlay: DASH SOUND NOT SET!"));
 	}
 
-	morseCodeComponent->SetDotDashTimes(0.3f, 0.3f, 0.3f, 1.3f, 2.f);
-
 }
 
 void AAudio_MorseCodeActor::MorseCodeOn(float duration, bool bIsDot)
