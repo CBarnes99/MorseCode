@@ -6,6 +6,7 @@
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
+class PlayerStates;
 
 UCLASS()
 class MORSECODE_API APlayerCharacter : public ACharacter
@@ -14,6 +15,13 @@ class MORSECODE_API APlayerCharacter : public ACharacter
 
 public:
 	APlayerCharacter();
+
+	PlayerStates* currentState;
+
+	UFUNCTION()
+	void CreateState(PlayerStates* newState);
+
+
 
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& InputValue);

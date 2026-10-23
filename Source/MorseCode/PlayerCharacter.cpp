@@ -3,6 +3,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include <EnhancedInputLibrary.h>
+#include "PlayerStates.h"
 #include "DrawDebugHelpers.h"
 #include "I_Interactable.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -14,7 +15,16 @@ APlayerCharacter::APlayerCharacter()
 	playerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	playerCamera->SetupAttachment(RootComponent);
 	playerCamera->bUsePawnControlRotation = true;
+	currentState = new StateOne();
 
+}
+
+void APlayerCharacter::CreateState(PlayerStates* newState)
+{
+	if (currentState != nullptr)
+		delete currentState;
+
+	currentState = newState;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -42,6 +52,10 @@ void APlayerCharacter::Look(const FInputActionValue& InputValue)
 
 void APlayerCharacter::Click()
 {
+
+
+
+
 	FHitResult hit;
 	FVector traceStartLoc = playerCamera->GetComponentLocation();
 	FVector traceEndLoc = traceStartLoc + (playerCamera->GetForwardVector() * 400.f);
