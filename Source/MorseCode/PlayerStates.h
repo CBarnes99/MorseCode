@@ -23,7 +23,7 @@ public:
 	APlayerCharacter* playerCharacter;
 
 
-	virtual FString GetStateName() PURE_VIRTUAL(UPlayerStates::GetStateName, return TEXT("VOID"););
+	virtual FString GetStateName() PURE_VIRTUAL(UPlayerStates::GetStateName, return TEXT("NOT OVERRIDDEN"););
 	virtual void DoAThing1() PURE_VIRTUAL(UPlayerStates::DoAThing1, );
 	virtual void DoAThing2() PURE_VIRTUAL(UPlayerStates::DoAThing2, );
 
