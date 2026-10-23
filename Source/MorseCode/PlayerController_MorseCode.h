@@ -47,4 +47,21 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* clickAction;
+
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* doAThing1Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* doAThing2Action;
+
+
+
+	UFUNCTION(BlueprintCallable)
+	void doAThing1Func();
+
+	UFUNCTION(BlueprintCallable)
+	void doAThing2Func();
 };

@@ -34,6 +34,11 @@ void APlayerController_MorseCode::SetupInputComponent()
 		Input->BindAction(moveAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Move);
 		Input->BindAction(lookAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Look);
 		Input->BindAction(clickAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Click);
+
+
+		Input->BindAction(doAThing1Action, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::doAThing1Func);
+		Input->BindAction(doAThing2Action, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::doAThing2Func);
+
 	}
 }
 
@@ -71,5 +76,31 @@ void APlayerController_MorseCode::Click()
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Click: Player Character Is Not VALID!!"));
+	}
+}
+
+
+
+void APlayerController_MorseCode::doAThing1Func()
+{
+	if (IsValid(playerCharacter))
+	{
+		playerCharacter->DoAThing1();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("doAThing1Func: Player Character Is Not VALID!!"));
+	}
+}
+
+void APlayerController_MorseCode::doAThing2Func()
+{
+	if (IsValid(playerCharacter))
+	{
+		playerCharacter->DoAThing2();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("doAThing2Func: Player Character Is Not VALID!!"));
 	}
 }

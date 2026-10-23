@@ -3,7 +3,6 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include <EnhancedInputLibrary.h>
-#include "PlayerStates.h"
 #include "DrawDebugHelpers.h"
 #include "I_Interactable.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -15,22 +14,48 @@ APlayerCharacter::APlayerCharacter()
 	playerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	playerCamera->SetupAttachment(RootComponent);
 	playerCamera->bUsePawnControlRotation = true;
-	currentState = new StateOne();
-
-}
-
-void APlayerCharacter::CreateState(PlayerStates* newState)
-{
-	if (currentState != nullptr)
-		delete currentState;
-
-	currentState = newState;
+	
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SwitchState(E_PlayerState::StateOne);
 }
+
+void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
+{
+	TSubclassOf<UPlayerStates> stateClass = nullptr;
+
+	switch (newPlayerState)
+	{
+	case E_PlayerState::StateOne:
+		stateClass = UStateOne::StaticClass();
+		break;
+
+	case E_PlayerState::StateTwo:
+		stateClass = UStateTwo::StaticClass();
+		break;
+
+	default:
+		UE_LOG(LogTemp, Error, TEXT("SwitchState: newPlayerState not valid!!"));
+		return;
+	}
+
+	if (!stateClass)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SwitchState: State Class Is Not Valid!"));
+		return;
+	}
+
+	UPlayerStates* newState = NewObject<UPlayerStates>(this, stateClass);
+	newState->playerCharacter = this;
+
+	currentState = newState;
+	UE_LOG(LogTemp, Warning, TEXT("SwitchState: Current state is now - %s"), *currentState->GetStateName());
+}
+
 
 void APlayerCharacter::Move(const FInputActionValue& InputValue)
 {
@@ -52,10 +77,6 @@ void APlayerCharacter::Look(const FInputActionValue& InputValue)
 
 void APlayerCharacter::Click()
 {
-
-
-
-
 	FHitResult hit;
 	FVector traceStartLoc = playerCamera->GetComponentLocation();
 	FVector traceEndLoc = traceStartLoc + (playerCamera->GetForwardVector() * 400.f);
@@ -88,4 +109,25 @@ void APlayerCharacter::Click()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Click: No Actor Hit"));
 	}
+}
+
+void APlayerCharacter::DoAThing1()
+{
+	if (!currentState)
+	{
+		UE_LOG(LogTemp, Error, TEXT("DoAThing1: currentState is INVALID"));
+		return;
+	}
+
+	currentState->DoAThing1();
+}
+
+void APlayerCharacter::DoAThing2()
+{
+	if (!currentState)
+	{
+		UE_LOG(LogTemp, Error, TEXT("DoAThing1: currentState is INVALID"));
+		return;
+	}
+	currentState->DoAThing2();
 }

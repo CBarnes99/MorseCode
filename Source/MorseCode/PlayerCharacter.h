@@ -3,10 +3,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
+#include "PlayerStates.h"
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
-class PlayerStates;
 
 UCLASS()
 class MORSECODE_API APlayerCharacter : public ACharacter
@@ -16,10 +16,11 @@ class MORSECODE_API APlayerCharacter : public ACharacter
 public:
 	APlayerCharacter();
 
-	PlayerStates* currentState;
+	UPROPERTY()
+	UPlayerStates* currentState;
 
 	UFUNCTION()
-	void CreateState(PlayerStates* newState);
+	void SwitchState(E_PlayerState newPlayerState);
 
 
 
@@ -31,6 +32,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Click();
+
+	UFUNCTION(BlueprintCallable)
+	void DoAThing1();
+
+	UFUNCTION(BlueprintCallable)
+	void DoAThing2();
 
 
 protected:
