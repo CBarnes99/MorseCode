@@ -22,8 +22,6 @@ public:
 	UFUNCTION()
 	void SwitchState(E_PlayerState newPlayerState);
 
-
-
 	UFUNCTION(BlueprintCallable)
 	void Move(const FInputActionValue& InputValue);
 

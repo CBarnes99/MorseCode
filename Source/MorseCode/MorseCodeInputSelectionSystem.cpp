@@ -1,4 +1,5 @@
 #include "MorseCodeInputSelectionSystem.h"
+#include "Components/StaticMeshComponent.h"
 #include "Components/ChildActorComponent.h"
 #include "SelectionButton.h"
 #include "UObject/ConstructorHelpers.h"
@@ -71,15 +72,32 @@ void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
 	}
 }
 
-void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(FGameplayTag uniqueMorseCodeTag, bool bIsPressed)
+//void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(FGameplayTag uniqueMorseCodeTag, bool bIsPressed)
+void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButton* buttonPressed)
 {
 	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
 	{
-		if (morseCodeActor->uniqueActorTag == uniqueMorseCodeTag)
+		//if (morseCodeActor->uniqueActorTag == uniqueMorseCodeTag)
+		if (morseCodeActor->uniqueActorTag == buttonPressed->morseCodeActorUniqueTag)
 		{
 			UE_LOG(LogTemp, Display, TEXT("ButtonPressedToggleMorseCode: Correct Tag witin %s"), *morseCodeActor->GetName());
-			morseCodeActor->StartStopMorseCode(bIsPressed);
-			break;
+			//morseCodeActor->StartStopMorseCode(bIsPressed);
+			morseCodeActor->StartStopMorseCode(buttonPressed->bIsPressed);
+		}
+		else if (buttonPressed->bIsPressed)
+		{
+			morseCodeActor->StartStopMorseCode(false);
+		}
+	}
+
+	if (buttonPressed->bIsPressed)
+	{
+		for (ASelectionButton* button : buttonArray)
+		{
+			if (button != buttonPressed && button->bIsPressed)
+			{
+				button->SetButtonNotPressed();
+			}
 		}
 	}
 }

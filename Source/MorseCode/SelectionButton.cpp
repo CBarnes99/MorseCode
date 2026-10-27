@@ -65,7 +65,8 @@ void ASelectionButton::Interact(AActor* interactor)
 	
 	if (ButtonPressedEvent.IsBound())
 	{
-		ButtonPressedEvent.Execute(morseCodeActorUniqueTag, bIsPressed);
+		//ButtonPressedEvent.Execute(morseCodeActorUniqueTag, bIsPressed);
+		ButtonPressedEvent.Execute(this);
 	}
 	else
 	{
@@ -84,7 +85,7 @@ void ASelectionButton::SetButtonToDisabled()
 void ASelectionButton::SetButtonToEnabled()
 {
 	bIsEnabled = true;
-	UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Enabled"), *GetName());
+	UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: %s - Is Enabled"), *GetName());
 
 	SetLightMaterial("Orange");
 
@@ -94,14 +95,24 @@ void ASelectionButton::ButtonPressed()
 {
 	if (bIsPressed == true)
 	{
-		bIsPressed = false;
-		SetLightMaterial("Orange");
+		SetButtonNotPressed();
 	}
 	else
 	{
-		bIsPressed = true;
-		SetLightMaterial("Green");
+		SetButtonPressed();
 	}
+}
+
+void ASelectionButton::SetButtonNotPressed()
+{
+	bIsPressed = false;
+	SetLightMaterial("Orange");
+}
+
+void ASelectionButton::SetButtonPressed()
+{
+	bIsPressed = true;
+	SetLightMaterial("Green");
 }
 
 void ASelectionButton::SetLightMaterial(FName dataTableName)

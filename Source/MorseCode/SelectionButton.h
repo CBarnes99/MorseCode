@@ -8,7 +8,8 @@
 
 class UStaticMeshComponent;
 
-DECLARE_DELEGATE_TwoParams(FButtonPressedSigniture, FGameplayTag /* Unique Tag For Morse Code Actor */, bool /* If Button is pressed or not */)
+//DECLARE_DELEGATE_TwoParams(FButtonPressedSigniture, FGameplayTag /* Unique Tag For Morse Code Actor */, bool /* If Button is pressed or not */)
+DECLARE_DELEGATE_OneParam(FButtonPressedSigniture, ASelectionButton*)
 
 UCLASS()
 class MORSECODE_API ASelectionButton : public AActor, public II_Interactable
@@ -39,6 +40,10 @@ public:
 	/** The gameplay tag that corrisponds to the morse code actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
 	FGameplayTag morseCodeActorUniqueTag;
+
+	/** A check to see if the button is pressed in or not, sent on a delegate to the Input Selection System */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	bool bIsPressed;
 	
 	/** When interact is called but the player, presses button and calls ButtonPressedEvent */
 	virtual void Interact(AActor* interactor) override;
@@ -53,16 +58,18 @@ public:
 	void ButtonPressed();
 
 	UFUNCTION(BlueprintCallable)
+	void SetButtonNotPressed();
+
+	UFUNCTION(BlueprintCallable)
+	void SetButtonPressed();
+
+	UFUNCTION(BlueprintCallable)
 	void SetLightMaterial(FName dataTableName);
 
 
 protected:
 
 	virtual void BeginPlay() override;
-
-	/** A check to see if the button is pressed in or not */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	bool bIsPressed;
 
 	/** A check for if the button is presseable or not, updated by the Input Selection System */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
