@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include <Kismet/GameplayStatics.h>
 #include "MorseCodeActor.h"
+#include "AcceptOrReject.h"
 
 AMorseCodeInputSelectionSystem::AMorseCodeInputSelectionSystem()
 {
@@ -70,18 +71,24 @@ void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
 	{
 		button->ButtonPressedEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode);
 	}
+
+	if (!acceptOrRejectActor)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AddButtonsToArrayAndBindDelegates: ACCEPT OR REJECT ACTOR NOT VALID!!"));
+		return;
+	}
+
+	acceptOrRejectActor->AcceptOrRejectEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject);
 }
 
-//void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(FGameplayTag uniqueMorseCodeTag, bool bIsPressed)
 void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButton* buttonPressed)
 {
 	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
 	{
-		//if (morseCodeActor->uniqueActorTag == uniqueMorseCodeTag)
 		if (morseCodeActor->uniqueActorTag == buttonPressed->morseCodeActorUniqueTag)
 		{
 			UE_LOG(LogTemp, Display, TEXT("ButtonPressedToggleMorseCode: Correct Tag witin %s"), *morseCodeActor->GetName());
-			//morseCodeActor->StartStopMorseCode(bIsPressed);
+			currentMorseCodeActor = morseCodeActor;
 			morseCodeActor->StartStopMorseCode(buttonPressed->bIsPressed);
 		}
 		else if (buttonPressed->bIsPressed)
@@ -92,6 +99,7 @@ void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButt
 
 	if (buttonPressed->bIsPressed)
 	{
+		currentButtonActor = buttonPressed;
 		for (ASelectionButton* button : buttonArray)
 		{
 			if (button != buttonPressed && button->bIsPressed)
@@ -99,6 +107,10 @@ void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButt
 				button->SetButtonNotPressed();
 			}
 		}
+	}
+	else
+	{
+		currentButtonActor = nullptr;
 	}
 }
 
@@ -129,4 +141,50 @@ void AMorseCodeInputSelectionSystem::EnableButtonAndSetMorseCodeActorInformation
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("EnableButtonAndSetMorseCodeActorInformation: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
+}
+
+
+void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
+{
+
+	if (!currentButtonActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MorseCodeSignalAcceptOrReject: Nothing to Accept Or Reject"));
+		return;
+	}
+
+	if (bAccept)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MorseCodeSignalAcceptOrReject: Morse Code Signal has been Accepted!"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MorseCodeSignalAcceptOrReject: Morse Code Signal has been Rejected!"));
+
+	}
+
+	DisableMorseCodeActorsAfterAcceptOrReject();
+}
+
+void AMorseCodeInputSelectionSystem::DisableMorseCodeActorsAfterAcceptOrReject()
+{
+	if(currentButtonActor)
+	{
+		currentButtonActor->SetButtonToDisabled();
+		currentButtonActor = nullptr;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("DisableMorseCodeActorsAfterAcceptOrReject: CURRENT BUTTON ACTOR NOT VALID"));
+	}
+
+	if (currentMorseCodeActor) 
+	{
+		currentMorseCodeActor->StartStopMorseCode(false);
+		currentMorseCodeActor = nullptr;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("DisableMorseCodeActorsAfterAcceptOrReject: CURRENT MORSE CODE ACTOR NOT VALID"));
+	}
 }

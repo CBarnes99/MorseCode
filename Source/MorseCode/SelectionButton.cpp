@@ -105,8 +105,11 @@ void ASelectionButton::ButtonPressed()
 
 void ASelectionButton::SetButtonNotPressed()
 {
-	bIsPressed = false;
-	SetLightMaterial("Orange");
+	if (bIsEnabled)
+	{
+		bIsPressed = false;
+		SetLightMaterial("Orange");
+	}
 }
 
 void ASelectionButton::SetButtonPressed()
