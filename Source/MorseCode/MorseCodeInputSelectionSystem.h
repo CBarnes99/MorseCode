@@ -6,6 +6,9 @@
 #include "F_MorseCodeStringsAndEncryption.h"
 #include "MorseCodeInputSelectionSystem.generated.h"
 
+DECLARE_DELEGATE_TwoParams(FOnAcceptOrRejectRecievedSigniture, bool /* value */, FString /* Morse Code String */)
+DECLARE_DELEGATE_TwoParams(FAmountOfMorseCodeAndKeyForTodaySigniture, int /* The value of the amount of morse code for today */, FString /* Current Key */)
+
 class UChildActorComponent;
 class ASelectionButton;
 class AMorseCodeActor;
@@ -19,6 +22,11 @@ class MORSECODE_API AMorseCodeInputSelectionSystem : public AActor
 public:	
 
 	AMorseCodeInputSelectionSystem();
+
+	/** Called only when MorseCodeSignalAcceptOrReject is called and sends the signel to the AcceptOrRejectResults Actor */
+	FOnAcceptOrRejectRecievedSigniture OnAcceptOrRejectRecievedEvent;
+	/** Called to send the amount of morse code to the Accept Or Reject Results */
+	FAmountOfMorseCodeAndKeyForTodaySigniture AmountOfMorseCodeAndKeyForTodayEvent;
 
 	/** The main mesh for the actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -39,7 +47,6 @@ public:
 	/** The actor that accepts or rejects the morse code that is currently being signaled */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AAcceptOrReject* acceptOrRejectActor;
-
 	/** When button pressed, toggle morse code actor on or off */
 	UFUNCTION(BlueprintCallable)
 	void ButtonPressedToggleMorseCode(ASelectionButton* buttonPressed);
@@ -48,6 +55,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EnableButtonAndSetMorseCodeActorInformation(F_MorseCodeStringsAndEncryption& morseCodeData);
 
+	UFUNCTION(BlueprintCallable)
+	void SetAmountOfMorseCodeAndKeyForToday(int amount, FString key);
 
 protected:
 	
@@ -79,6 +88,4 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void DisableMorseCodeActorsAfterAcceptOrReject();
-
-
 };

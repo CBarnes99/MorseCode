@@ -28,5 +28,4 @@ public:
 	/** The tag the Morse Code Actor and Button has to activate them */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag uniqueTagForMorseCodeActor;
-
 };

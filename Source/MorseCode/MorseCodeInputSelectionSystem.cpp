@@ -81,6 +81,20 @@ void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
 	acceptOrRejectActor->AcceptOrRejectEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject);
 }
 
+void AMorseCodeInputSelectionSystem::SetAmountOfMorseCodeAndKeyForToday(int amount, FString key)
+{
+	if (AmountOfMorseCodeAndKeyForTodayEvent.IsBound())
+	{
+		UE_LOG(LogTemp, Error, TEXT("SetAmountOfMorseCodeAndKeyForToday: CORRECTLY BOUND!!"));
+
+		AmountOfMorseCodeAndKeyForTodayEvent.ExecuteIfBound(amount, key);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("SetAmountOfMorseCodeAndKeyForToday: NOT BOUND!!"));
+	}
+}
+
 void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButton* buttonPressed)
 {
 	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
@@ -143,7 +157,6 @@ void AMorseCodeInputSelectionSystem::EnableButtonAndSetMorseCodeActorInformation
 	UE_LOG(LogTemp, Warning, TEXT("EnableButtonAndSetMorseCodeActorInformation: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
 }
 
-
 void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
 {
 
@@ -153,15 +166,7 @@ void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
 		return;
 	}
 
-	if (bAccept)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("MorseCodeSignalAcceptOrReject: Morse Code Signal has been Accepted!"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("MorseCodeSignalAcceptOrReject: Morse Code Signal has been Rejected!"));
-
-	}
+	OnAcceptOrRejectRecievedEvent.ExecuteIfBound(bAccept, currentMorseCodeActor->currentString);
 
 	DisableMorseCodeActorsAfterAcceptOrReject();
 }

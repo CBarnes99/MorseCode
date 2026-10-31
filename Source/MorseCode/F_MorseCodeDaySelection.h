@@ -16,4 +16,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* uniqueDaysMorseCodeData;
 
+	/** The key that needs to be included within the morse code string to decode to be accepted */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString morseCodeKey;
+
 };

@@ -29,23 +29,27 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AMorseCodeInputSelectionSystem* inputSelectionSystem;
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int currentTimeInMinutes;
+	int currentTime;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentDay;
 
 	UFUNCTION(BlueprintCallable)
-	void SetDay(int day);
+	void StartNextDay();
 
 	UFUNCTION(BlueprintCallable)
 	void ProgressTime();
 
 protected:
 
-	FTimerHandle progressTimeTimerHandle;
+	FTimerHandle ProgressTimeTimerHandle;
+	//FTimerHandle DelayForNewDay;
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void ResetDayInformation();
 
 };

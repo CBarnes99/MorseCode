@@ -22,6 +22,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UAC_MorseCodeComponent* morseCodeComponent;
 
+	/** The current string that is being used for this actor */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FString currentString;
+
 	/** Sets the encryption type and the string to decode within the morse code component */
 	UFUNCTION(BlueprintCallable)
 	void SetMorseCodeInformation(E_EncryptionTypes newEncryptionType, FString stringToDecode);
