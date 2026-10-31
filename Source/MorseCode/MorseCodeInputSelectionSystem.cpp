@@ -85,7 +85,7 @@ void AMorseCodeInputSelectionSystem::SetAmountOfMorseCodeAndKeyForToday(int amou
 {
 	if (AmountOfMorseCodeAndKeyForTodayEvent.IsBound())
 	{
-		UE_LOG(LogTemp, Error, TEXT("SetAmountOfMorseCodeAndKeyForToday: CORRECTLY BOUND!!"));
+		UE_LOG(LogTemp, Display, TEXT("SetAmountOfMorseCodeAndKeyForToday: CORRECTLY BOUND!!"));
 
 		AmountOfMorseCodeAndKeyForTodayEvent.ExecuteIfBound(amount, key);
 	}

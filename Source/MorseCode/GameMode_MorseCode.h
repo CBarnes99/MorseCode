@@ -15,12 +15,19 @@ public:
 	ATimeManager* timeManager;
 
 	UFUNCTION(BlueprintCallable)
-	void StartNewDay();
+	void CallToStartNewDayWithDelay();
 
 protected:
 
 	virtual void StartPlay() override;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float delayToStartNewDay;
+
+
+	UFUNCTION(BlueprintCallable)
+	void StartNewDay();
 
 	FTimerHandle DelayForNewDay;
 };

@@ -6,18 +6,27 @@ void AGameMode_MorseCode::StartPlay()
 {
 	Super::StartPlay();
 
+	delayToStartNewDay = 3.f;
+
 	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
 	timeManager = Cast<ATimeManager>(actor);
 
 	if (timeManager)
 	{
-		GetWorld()->GetTimerManager().SetTimer(DelayForNewDay, this, &AGameMode_MorseCode::StartNewDay, 1, false);
+		CallToStartNewDayWithDelay();
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("StartPlay: Time Manager Not Set!!"));
 	}
 }
+
+void AGameMode_MorseCode::CallToStartNewDayWithDelay()
+{
+	UE_LOG(LogTemp, Warning, TEXT("CallToStartNewDayWithDelay: Called!"));
+	GetWorld()->GetTimerManager().SetTimer(DelayForNewDay, this, &AGameMode_MorseCode::StartNewDay, delayToStartNewDay, false);
+}
+
 
 void AGameMode_MorseCode::StartNewDay()
 {

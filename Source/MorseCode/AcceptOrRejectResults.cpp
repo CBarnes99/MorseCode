@@ -1,5 +1,6 @@
 #include "AcceptOrRejectResults.h"
 #include "MorseCodeInputSelectionSystem.h"
+#include "GameMode_MorseCode.h"
 
 AAcceptOrRejectResults::AAcceptOrRejectResults()
 {
@@ -78,5 +79,14 @@ void AAcceptOrRejectResults::CheckIfAllMorseCodeIsComplete()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CheckIfAllMorseCodeIsComplete: All Morse Code done! Amount Correct - %d, Amount Incorrect - %d"), correctResults, incorrectResults);
 		ResetResults();
+
+		AGameMode_MorseCode* gameMode = GetWorld()->GetAuthGameMode<AGameMode_MorseCode>();
+
+		if (!gameMode)
+		{
+			UE_LOG(LogTemp, Error, TEXT("CheckIfAllMorseCodeIsComplete: GAME MODE NOT FOUND, CANT RESET DAY!"));
+			return;
+		}
+		gameMode->CallToStartNewDayWithDelay();
 	}
 }

@@ -39,6 +39,12 @@ void ATimeManager::StartNextDay()
 	//Set the correct data table for the right day
 	FName dayAsName = FName(*FString::FromInt(currentDay));
 	F_MorseCodeDaySelection* morseCodeData = morseCodeDaySelectionDataTable->FindRow<F_MorseCodeDaySelection>(dayAsName, "Finding Morse Code Day Data Table");
+
+	if (!morseCodeData)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartNextDay: NO MORSE CODE DATA FOUND, NO MORSE CODE WILL BE ENABLED FROM NOW ON!"));
+		return;
+	}
 	morseCodeCurrentDayDataTable = morseCodeData->uniqueDaysMorseCodeData;
 
 	//Get all the time values and Row Names
