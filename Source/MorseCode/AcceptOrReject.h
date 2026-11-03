@@ -20,6 +20,10 @@ public:
 
 	FAcceptOrRejectSignature AcceptOrRejectEvent;
 
+
+protected:
+	virtual void BeginPlay() override;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* baseMesh;
 
@@ -31,9 +35,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AAcceptOrRejectButtons*> buttonsArray;
-
-protected:
-	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
 	void ButtonPressed(bool value);

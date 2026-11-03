@@ -117,8 +117,6 @@ protected:
 	float restartTime;
 
 
-
-
 	/** Gets all the information needed for the next character */
 	UFUNCTION(BlueprintCallable)
 	void GetNextCharacter();

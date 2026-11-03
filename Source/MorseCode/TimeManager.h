@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "TimeManager.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnTimeUpdatedSigniture)
+
 class AMorseCodeInputSelectionSystem;
 
 UCLASS()
@@ -14,6 +16,8 @@ class MORSECODE_API ATimeManager : public AActor
 public:	
 
 	ATimeManager();
+
+	FOnTimeUpdatedSigniture OnTimeUpdatedEvent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UDataTable* morseCodeDaySelectionDataTable;
@@ -45,7 +49,7 @@ public:
 protected:
 
 	FTimerHandle ProgressTimeTimerHandle;
-	//FTimerHandle DelayForNewDay;
+	//FTimerHandle DelayForNewDayTimerHandle;
 
 	virtual void BeginPlay() override;
 

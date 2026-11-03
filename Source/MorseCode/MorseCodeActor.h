@@ -34,10 +34,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartStopMorseCode(bool bStartMorseCode);
 	
-	/** When the morse code has ended, do something */
-	UFUNCTION(BlueprintCallable)
-	virtual void MorseCodeEnded();
-
 	/** When the morse code light is on, do something */
 	UFUNCTION(BlueprintCallable)
 	virtual void MorseCodeOn(float duration, bool bIsDot);
@@ -45,6 +41,10 @@ public:
 	/** When the morse code off is on, do something */
 	UFUNCTION(BlueprintCallable)
 	virtual void MorseCodeOff();
+
+	/** When the morse code has ended, do something */
+	UFUNCTION(BlueprintCallable)
+	virtual void MorseCodeEnded();
 
 
 protected:

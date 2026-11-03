@@ -8,7 +8,6 @@
 
 class UStaticMeshComponent;
 
-//DECLARE_DELEGATE_TwoParams(FButtonPressedSigniture, FGameplayTag /* Unique Tag For Morse Code Actor */, bool /* If Button is pressed or not */)
 DECLARE_DELEGATE_OneParam(FButtonPressedSigniture, ASelectionButton*)
 
 UCLASS()
@@ -35,7 +34,7 @@ public:
 	UDataTable* materialsDataTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UMaterialInstance* currentMaterial;
+	UMaterialInstance* currentLightMaterial;
 
 	/** The gameplay tag that corrisponds to the morse code actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")

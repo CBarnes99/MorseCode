@@ -24,7 +24,7 @@ void AGameMode_MorseCode::StartPlay()
 void AGameMode_MorseCode::CallToStartNewDayWithDelay()
 {
 	UE_LOG(LogTemp, Warning, TEXT("CallToStartNewDayWithDelay: Called!"));
-	GetWorld()->GetTimerManager().SetTimer(DelayForNewDay, this, &AGameMode_MorseCode::StartNewDay, delayToStartNewDay, false);
+	GetWorld()->GetTimerManager().SetTimer(DelayForNewDayTimerHandle, this, &AGameMode_MorseCode::StartNewDay, delayToStartNewDay, false);
 }
 
 

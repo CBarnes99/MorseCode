@@ -67,6 +67,8 @@ void ATimeManager::ProgressTime()
 {
 	currentTime++;
 	
+	OnTimeUpdatedEvent.Broadcast();
+
 	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Orange, FString::Printf(TEXT("ProgressTime: Current time is - %d"), currentTime));
 	//UE_LOG(LogTemp, Display, TEXT("ProgressTime: Current time is - %d"), currentTime);
 

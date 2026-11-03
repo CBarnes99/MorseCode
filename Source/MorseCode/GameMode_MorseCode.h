@@ -12,7 +12,7 @@ class MORSECODE_API AGameMode_MorseCode : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-	ATimeManager* timeManager;
+	
 
 	UFUNCTION(BlueprintCallable)
 	void CallToStartNewDayWithDelay();
@@ -21,6 +21,8 @@ protected:
 
 	virtual void StartPlay() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ATimeManager* timeManager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float delayToStartNewDay;
@@ -29,5 +31,5 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void StartNewDay();
 
-	FTimerHandle DelayForNewDay;
+	FTimerHandle DelayForNewDayTimerHandle;
 };
