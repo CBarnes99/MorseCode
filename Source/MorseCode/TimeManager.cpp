@@ -9,6 +9,7 @@ ATimeManager::ATimeManager()
 	PrimaryActorTick.bCanEverTick = false;
 
 	currentDay = 0;
+	amountOfSecondsToProgressTime = 1.f;
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> dayDataTable(TEXT("/Game/DataTables/DT_DaySelection.DT_DaySelection"));
 	if (dayDataTable.Succeeded())
@@ -60,7 +61,7 @@ void ATimeManager::StartNextDay()
 	inputSelectionSystem->SetAmountOfMorseCodeAndKeyForToday(allRowsOfCurrentDayTime.Num(), morseCodeData->morseCodeKey);
 
 	//progress the timer every second and checks data table for information;
-	GetWorld()->GetTimerManager().SetTimer(ProgressTimeTimerHandle, this, &ATimeManager::ProgressTime, 1, true);
+	GetWorld()->GetTimerManager().SetTimer(ProgressTimeTimerHandle, this, &ATimeManager::ProgressTime, amountOfSecondsToProgressTime, true);
 }
 
 void ATimeManager::ProgressTime()

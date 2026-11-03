@@ -6,6 +6,8 @@
 
 class ATimeManager;
 class UUI_Clock;
+class UWidgetComponent;
+class UStaticMeshComponent;
 
 UCLASS()
 class MORSECODE_API AClock : public AActor
@@ -20,13 +22,20 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Clock")
+	UStaticMeshComponent* clockMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Clock")
+	UWidgetComponent* clockWidgetComp;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Clock")
 	ATimeManager* timeManagerActor;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Clock")
 	UUI_Clock* clockUIWidget;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Clock")
 	TSubclassOf<UUI_Clock> clockUIClass;
 
 	UFUNCTION(BlueprintCallable)

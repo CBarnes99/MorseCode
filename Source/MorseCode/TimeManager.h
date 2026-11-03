@@ -40,6 +40,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentDay;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float amountOfSecondsToProgressTime;
+
 	UFUNCTION(BlueprintCallable)
 	void StartNextDay();
 

@@ -19,6 +19,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ProgressTime();
 
+	UFUNCTION(BlueprintCallable)
+	void ResetClock();
+
 protected:
 
 	virtual void NativeConstruct() override;
