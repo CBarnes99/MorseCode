@@ -32,10 +32,10 @@ public:
 	void Click();
 
 	UFUNCTION(BlueprintCallable)
-	void DoAThing1();
+	void StateAction1();
 
 	UFUNCTION(BlueprintCallable)
-	void DoAThing2();
+	void StateAction2();
 
 
 protected:

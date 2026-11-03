@@ -9,8 +9,8 @@ class APlayerCharacter;
 UENUM(BlueprintType)
 enum class E_PlayerState : uint8
 {
-	StateOne UMETA(DisplayName = "State One"),
-	StateTwo UMETA(DisplayName = "State Two")
+	MovingState UMETA(DisplayName = "Moving State"),
+	NotepadState UMETA(DisplayName = "Notepad State")
 };
 
 UCLASS(Abstract)
@@ -24,8 +24,8 @@ public:
 
 
 	virtual FString GetStateName() PURE_VIRTUAL(UPlayerStates::GetStateName, return TEXT("NOT OVERRIDDEN"););
-	virtual void DoAThing1() PURE_VIRTUAL(UPlayerStates::DoAThing1, );
-	virtual void DoAThing2() PURE_VIRTUAL(UPlayerStates::DoAThing2, );
+	virtual void StateAction1() PURE_VIRTUAL(UPlayerStates::StateAction1, );
+	virtual void StateAction2() PURE_VIRTUAL(UPlayerStates::StateAction2, );
 
 
 	//When state change do this
@@ -35,23 +35,23 @@ public:
 };
 
 UCLASS()
-class UStateOne : public UPlayerStates
+class UMovingState: public UPlayerStates
 {
 	GENERATED_BODY()
 public:
 	
 	virtual FString GetStateName() override;
-	virtual void DoAThing1() override;
-	virtual void DoAThing2() override;
+	virtual void StateAction1() override;
+	virtual void StateAction2() override;
 };
 
 UCLASS()
-class UStateTwo : public UPlayerStates
+class UNotepadState : public UPlayerStates
 {
 	GENERATED_BODY()
 public:
 
 	virtual FString GetStateName() override;
-	virtual void DoAThing1() override;
-	virtual void DoAThing2() override;
+	virtual void StateAction1() override;
+	virtual void StateAction2() override;
 };

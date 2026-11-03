@@ -21,7 +21,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SwitchState(E_PlayerState::StateOne);
+	SwitchState(E_PlayerState::MovingState);
 }
 
 void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
@@ -30,12 +30,12 @@ void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
 
 	switch (newPlayerState)
 	{
-	case E_PlayerState::StateOne:
-		stateClass = UStateOne::StaticClass();
+	case E_PlayerState::MovingState:
+		stateClass = UMovingState::StaticClass();
 		break;
 
-	case E_PlayerState::StateTwo:
-		stateClass = UStateTwo::StaticClass();
+	case E_PlayerState::NotepadState:
+		stateClass = UNotepadState::StaticClass();
 		break;
 
 	default:
@@ -111,23 +111,23 @@ void APlayerCharacter::Click()
 	}
 }
 
-void APlayerCharacter::DoAThing1()
+void APlayerCharacter::StateAction1()
 {
 	if (!currentState)
 	{
-		UE_LOG(LogTemp, Error, TEXT("DoAThing1: currentState is INVALID"));
+		UE_LOG(LogTemp, Error, TEXT("StateAction1: currentState is INVALID"));
 		return;
 	}
 
-	currentState->DoAThing1();
+	currentState->StateAction1();
 }
 
-void APlayerCharacter::DoAThing2()
+void APlayerCharacter::StateAction2()
 {
 	if (!currentState)
 	{
-		UE_LOG(LogTemp, Error, TEXT("DoAThing1: currentState is INVALID"));
+		UE_LOG(LogTemp, Error, TEXT("StateAction2: currentState is INVALID"));
 		return;
 	}
-	currentState->DoAThing2();
+	currentState->StateAction2();
 }

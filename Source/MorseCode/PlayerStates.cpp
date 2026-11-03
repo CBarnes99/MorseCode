@@ -3,17 +3,17 @@
 
 //State 1
 
-FString UStateOne::GetStateName()
+FString UMovingState::GetStateName()
 {
-	return "State 1";
+	return "UMovingState";
 }
 
-void UStateOne::DoAThing1()
+void UMovingState::StateAction1()
 {
-	UE_LOG(LogTemp, Error, TEXT("State 1: Do a thing 1"));
+	playerCharacter->Click();
 };
 
-void UStateOne::DoAThing2()
+void UMovingState::StateAction2()
 {
 	UE_LOG(LogTemp, Error, TEXT("State 1: Do a thing 2"));
 };
@@ -24,18 +24,18 @@ void UStateOne::DoAThing2()
 
 //State 2
 
-FString UStateTwo::GetStateName()
+FString UNotepadState::GetStateName()
 {
-	return "State 2";
+	return "UNotepadState";
 
 }
-void UStateTwo::DoAThing1()
+void UNotepadState::StateAction1()
 {
 	UE_LOG(LogTemp, Error, TEXT("State 2: Do a thing 1"));
 
 };
 
-void UStateTwo::DoAThing2()
+void UNotepadState::StateAction2()
 {
 	UE_LOG(LogTemp, Error, TEXT("State 2: Do a thing 2"));
 };
