@@ -7,7 +7,7 @@
 
 class UStaticMeshComponent;
 class UWidgetComponent;
-class UNotepadInput;
+class UUI_NotepadInput;
 class APlayerCharacter;
 
 UCLASS()
@@ -21,7 +21,8 @@ public:
 	virtual void Interact(AActor* interactor) override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<UNotepadInput> notepadWidgetClass;
+	TSubclassOf<UUserWidget> notepadWidgetClass;
+	//TSubclassOf<UUI_NotepadInput> notepadWidgetClass;
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,10 +34,7 @@ protected:
 	UWidgetComponent* notepadInputComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UNotepadInput* notepadInput;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	APlayerCharacter* playerRef;
+	UUI_NotepadInput* notepadInput;
 
 	UFUNCTION(BlueprintCallable)
 	void SetNotepadComp();

@@ -1,7 +1,7 @@
 #include "Notepad.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
-#include "NotepadInput.h"
+#include "UI_NotepadInput.h"
 #include "PlayerCharacter.h"
 
 ANotepad::ANotepad()
@@ -18,6 +18,7 @@ ANotepad::ANotepad()
 	notepadInputComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	notepadInputComp->SetUsingAbsoluteScale(true);
 	notepadInputComp->SetWindowFocusable(true);
+	notepadInputComp->SetDrawSize(FVector2D(100.f, 100.f));
 
 }
 
@@ -40,49 +41,35 @@ void ANotepad::SetNotepadComp()
 
 	notepadInputComp->SetWidgetClass(notepadWidgetClass);
 	notepadInputComp->InitWidget();
-	notepadInput = Cast<UNotepadInput>(notepadInputComp->GetUserWidgetObject());
+	notepadInput = Cast<UUI_NotepadInput>(notepadInputComp->GetUserWidgetObject());
 
-	//notepadInput = CreateWidget<UNotepadInput>(GetWorld(), notepadWidgetClass);
-	//notepadInputComp->SetWidget(notepadInput);
 	notepadInput->TextCommittedEvent.BindUObject(this, &ANotepad::OnTextCommitted);
-
 }
 
 void ANotepad::Interact(AActor* interactor)
 {
-	playerRef = Cast<APlayerCharacter>(interactor);
-	if (playerRef)
+	if (!notepadInput)
 	{
-		playerRef->SwitchState(E_PlayerState::NotepadState);
-		notepadInput->SetFocusToNotepad();
+		UE_LOG(LogTemp, Error, TEXT("Interact: NOTEPAD INPUT NOT VALID!"));
+		return;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Interact: Player Not Valid!"));
-	}
+
+	notepadInput->SetFocusToNotepad();
 }
 
 void ANotepad::OnTextCommitted(const FText& outputText)
 {
 
-	if (playerRef)
+	if (APlayerController* playerController = GetWorld()->GetFirstPlayerController())
 	{
-		playerRef->SwitchState(E_PlayerState::MovingState);
+		FInputModeGameOnly inputMode;
+		playerController->SetShowMouseCursor(false);
+		playerController->SetInputMode(inputMode);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("OnTextCommitted: Player Not Valid!"));
+		UE_LOG(LogTemp, Error, TEXT("OnTextCommitted: Player Controller Not Valid!"));
 	}
-	//if (APlayerController* playerController = GetWorld()->GetFirstPlayerController())
-	//{
-	//	FInputModeGameOnly inputMode;
-	//	playerController->SetInputMode(inputMode);
-	//	playerController->SetShowMouseCursor(false);
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("OnTextCommitted: Player Controller Not Valid!"));
-	//}
 }
 
 

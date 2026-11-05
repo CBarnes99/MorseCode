@@ -15,7 +15,7 @@ void UMovingState::StateAction1()
 
 void UMovingState::StateAction2()
 {
-	UE_LOG(LogTemp, Error, TEXT("State 1: Do a thing 2"));
+	UE_LOG(LogTemp, Error, TEXT("UMovingState: Do a thing 2"));
 };
 
 
@@ -32,7 +32,6 @@ FString UNotepadState::GetStateName()
 void UNotepadState::StateAction1()
 {
 	UE_LOG(LogTemp, Error, TEXT("State 2: Do a thing 1"));
-
 };
 
 void UNotepadState::StateAction2()
