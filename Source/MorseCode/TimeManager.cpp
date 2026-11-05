@@ -10,6 +10,7 @@ ATimeManager::ATimeManager()
 
 	currentDay = 0;
 	amountOfSecondsToProgressTime = 1.f;
+	minutesToCheckToAddMorseCode = 5;
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> dayDataTable(TEXT("/Game/DataTables/DT_DaySelection.DT_DaySelection"));
 	if (dayDataTable.Succeeded())
@@ -73,14 +74,23 @@ void ATimeManager::ProgressTime()
 	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Orange, FString::Printf(TEXT("ProgressTime: Current time is - %d"), currentTime));
 	//UE_LOG(LogTemp, Display, TEXT("ProgressTime: Current time is - %d"), currentTime);
 
+	bool bAddedMorseCode = false;
+
 	for (int i = 0; i < allRowsOfCurrentDayTime.Num(); i++)
 	{
 		if (currentTime == allRowsOfCurrentDayTime[i])
 		{
 			F_MorseCodeStringsAndEncryption* morseCodeData = morseCodeCurrentDayDataTable->FindRow<F_MorseCodeStringsAndEncryption>(allRowsOfCurrentDayName[i], "Finding Row For MorseCodeData");
-			inputSelectionSystem->EnableButtonAndSetMorseCodeActorInformation(*morseCodeData);
+			//inputSelectionSystem->EnableButtonAndSetMorseCodeActorInformation(*morseCodeData);
+			inputSelectionSystem->AddMorseCodeInformationToPool(*morseCodeData);
+			bAddedMorseCode = true;
 			break;
 		}
+	}
+
+	if (currentTime % minutesToCheckToAddMorseCode == 0 && !bAddedMorseCode)
+	{
+		inputSelectionSystem->CheckIfMorseCodeButtonsAreAvailable();
 	}
 }
 

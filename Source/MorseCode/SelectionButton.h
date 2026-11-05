@@ -43,6 +43,10 @@ public:
 	/** A check to see if the button is pressed in or not, sent on a delegate to the Input Selection System */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	bool bIsPressed;
+
+	/** A check for if the button is presseable or not, updated by the Input Selection System */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	bool bIsEnabled;
 	
 	/** When interact is called but the player, presses button and calls ButtonPressedEvent */
 	virtual void Interact(AActor* interactor) override;
@@ -69,9 +73,4 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
-
-	/** A check for if the button is presseable or not, updated by the Input Selection System */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	bool bIsEnabled;
-
 };

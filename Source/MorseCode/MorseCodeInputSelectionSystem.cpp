@@ -95,6 +95,13 @@ void AMorseCodeInputSelectionSystem::SetAmountOfMorseCodeAndKeyForToday(int amou
 	}
 }
 
+void AMorseCodeInputSelectionSystem::AddMorseCodeInformationToPool(F_MorseCodeStringsAndEncryption& morseCodeData)
+{
+	morseCodeInformationPool.Add(morseCodeData);
+
+	CheckIfMorseCodeButtonsAreAvailable();
+}
+
 void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButton* buttonPressed)
 {
 	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
@@ -128,33 +135,76 @@ void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionButt
 	}
 }
 
-void AMorseCodeInputSelectionSystem::EnableButtonAndSetMorseCodeActorInformation(F_MorseCodeStringsAndEncryption& morseCodeData)
+void AMorseCodeInputSelectionSystem::CheckIfMorseCodeButtonsAreAvailable()
 {
 	//For debugging
 	FString buttonName = "Not Set";
 	FString morseCodeActorName = "Not Set";
 
-	for (ASelectionButton* button : buttonArray)
+	bool buttonAvaliable = false;
+
+	//F_MorseCodeStringsAndEncryption data : morseCodeInformationPool
+
+	for (int i = 0; i < morseCodeInformationPool.Num(); i++)
 	{
-		if (button->morseCodeActorUniqueTag == morseCodeData.uniqueTagForMorseCodeActor)
+		for (ASelectionButton* button : buttonArray)
 		{
-			button->SetButtonToEnabled();
-			buttonName = button->GetName();
-			break;
+			if (button->morseCodeActorUniqueTag == morseCodeInformationPool[i].uniqueTagForMorseCodeActor && !button->bIsEnabled)
+			{
+				button->SetButtonToEnabled();
+
+				buttonAvaliable = true;
+
+				buttonName = button->GetName();
+				break;
+			}
 		}
-	}
-	
-	for (AMorseCodeActor* actor : morseCodeActorsArray)
-	{
-		if (actor->uniqueActorTag == morseCodeData.uniqueTagForMorseCodeActor)
+
+		if (!buttonAvaliable)
 		{
-			actor->SetMorseCodeInformation(morseCodeData.encryptionType, morseCodeData.sentenceToDecode);
-			morseCodeActorName = actor->GetName();
-			break;
+			continue;
+		}
+
+		for (AMorseCodeActor* actor : morseCodeActorsArray)
+		{
+			if (actor->uniqueActorTag == morseCodeInformationPool[i].uniqueTagForMorseCodeActor)
+			{
+				actor->SetMorseCodeInformation(morseCodeInformationPool[i].encryptionType, morseCodeInformationPool[i].sentenceToDecode);
+				morseCodeActorName = actor->GetName();
+
+				morseCodeInformationPool.RemoveAt(i);
+
+				UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
+				return;
+			}
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("EnableButtonAndSetMorseCodeActorInformation: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
+	UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: No buttons are available!"));
+
+
+
+	//for (ASelectionButton* button : buttonArray)
+	//{
+	//	if (button->morseCodeActorUniqueTag == morseCodeData.uniqueTagForMorseCodeActor)
+	//	{
+	//		button->SetButtonToEnabled();
+	//		buttonName = button->GetName();
+	//		break;
+	//	}
+	//}
+	//
+	//for (AMorseCodeActor* actor : morseCodeActorsArray)
+	//{
+	//	if (actor->uniqueActorTag == morseCodeData.uniqueTagForMorseCodeActor)
+	//	{
+	//		actor->SetMorseCodeInformation(morseCodeData.encryptionType, morseCodeData.sentenceToDecode);
+	//		morseCodeActorName = actor->GetName();
+	//		break;
+	//	}
+	//}
+
+	//UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
 }
 
 void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)

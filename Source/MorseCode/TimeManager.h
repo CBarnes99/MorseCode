@@ -45,6 +45,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float amountOfSecondsToProgressTime;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int minutesToCheckToAddMorseCode;
+
 	UFUNCTION(BlueprintCallable)
 	void StartNextDay();
 

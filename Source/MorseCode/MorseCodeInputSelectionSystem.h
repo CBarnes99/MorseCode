@@ -53,10 +53,13 @@ public:
 
 	/** When the time manager finds a correct time, sends information to this actor to enable button and sets information in the morse code actor */
 	UFUNCTION(BlueprintCallable)
-	void EnableButtonAndSetMorseCodeActorInformation(F_MorseCodeStringsAndEncryption& morseCodeData);
+	void CheckIfMorseCodeButtonsAreAvailable();
 
 	UFUNCTION(BlueprintCallable)
 	void SetAmountOfMorseCodeAndKeyForToday(int amount, FString key);
+
+	UFUNCTION(BlueprintCallable)
+	void AddMorseCodeInformationToPool(F_MorseCodeStringsAndEncryption& morseCodeData);
 
 protected:
 	
@@ -75,6 +78,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	ASelectionButton* currentButtonActor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
+	TArray<F_MorseCodeStringsAndEncryption> morseCodeInformationPool;
 
 	UFUNCTION(BlueprintCallable)
 	void AddButtonsToArrayAndBindDelegates();
