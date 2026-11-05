@@ -92,4 +92,6 @@ void ATimeManager::ResetDayInformation()
 	allRowsOfCurrentDayTime.Empty();
 	allRowsOfCurrentDayName.Empty();
 
+	DayResetEvent.Broadcast();
+
 }

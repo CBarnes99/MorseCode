@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "AcceptOrRejectResults.generated.h"
 
+DECLARE_DELEGATE(FOnAllMorseCodeFinishedSigniture)
+
 class AMorseCodeInputSelectionSystem;
 
 UCLASS()
@@ -14,6 +16,7 @@ class MORSECODE_API AAcceptOrRejectResults : public AActor
 public:	
 	AAcceptOrRejectResults();
 
+	FOnAllMorseCodeFinishedSigniture OnAllMorseCodeFinishedEvent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AMorseCodeInputSelectionSystem* morseCodeInputSelectionSystem;

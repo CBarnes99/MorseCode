@@ -5,6 +5,7 @@
 #include "TimeManager.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnTimeUpdatedSigniture)
+DECLARE_MULTICAST_DELEGATE(FDayResetSigniture)
 
 class AMorseCodeInputSelectionSystem;
 
@@ -18,6 +19,7 @@ public:
 	ATimeManager();
 
 	FOnTimeUpdatedSigniture OnTimeUpdatedEvent;
+	FDayResetSigniture DayResetEvent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UDataTable* morseCodeDaySelectionDataTable;

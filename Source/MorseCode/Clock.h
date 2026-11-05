@@ -43,4 +43,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void ProgressTimeInUI();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetTimeInUI();
 };

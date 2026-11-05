@@ -62,6 +62,7 @@ void AClock::SetTimeManagerAndWidget()
 	}
 
 	timeManagerActor->OnTimeUpdatedEvent.AddUObject(this, &AClock::ProgressTimeInUI);
+	timeManagerActor->DayResetEvent.AddUObject(this, &AClock::ResetTimeInUI);
 }
 
 void AClock::ProgressTimeInUI()
@@ -69,4 +70,7 @@ void AClock::ProgressTimeInUI()
 	clockUIWidget->ProgressTime();
 }
 
-
+void AClock::ResetTimeInUI()
+{
+	clockUIWidget->ResetClock();
+}
