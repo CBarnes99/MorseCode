@@ -21,9 +21,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	E_EncryptionTypes encryptionType;
 
-	/** What time does the morse code actor/button activate */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int timeActivatedInMinutes;
+	/** What hour does the morse code actor/button activate */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "9", ClampMax = "17"))
+	int hour;
+
+	/** What minute does the morse code actor/button activate */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0", ClampMax = "59"))
+	int minute;
 	
 	/** The tag the Morse Code Actor and Button has to activate them */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

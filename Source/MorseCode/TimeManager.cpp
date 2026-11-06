@@ -8,6 +8,8 @@ ATimeManager::ATimeManager()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	currentMinute = 0;
+	currentHour = 9;
 	currentDay = 0;
 	amountOfSecondsToProgressTime = 1.f;
 	minutesToCheckToAddMorseCode = 5;
@@ -34,6 +36,7 @@ void ATimeManager::SetNewDayInformation()
 {
 	ResetDayInformation();
 
+	//Updates new day and sends out broudcast to update actors with new day as an int
 	currentDay++;
 	UE_LOG(LogTemp, Display, TEXT("StartNextDay: Current day is - %d"), currentDay);
 	CurrentDayEvent.Broadcast(currentDay);
@@ -49,18 +52,12 @@ void ATimeManager::SetNewDayInformation()
 		return;
 	}
 
+	//Sends out the current key as a string
 	NewKeyEvent.Broadcast(morseCodeData->morseCodeKey);
 }
 
-//this needs to be called at the start of the in game day to set the day then kick off the information to the input selection system.
 void ATimeManager::StartNextDay()
 {
-	//ResetDayInformation();
-
-	//currentDay++;
-	//UE_LOG(LogTemp, Display, TEXT("StartNextDay: Current day is - %d"), currentDay);
-	//CurrentDayEvent.Broadcast(currentDay);
-
 
 	//Set the correct data table for the right day
 	FName dayAsName = FName(*FString::FromInt(currentDay));
@@ -72,21 +69,20 @@ void ATimeManager::StartNextDay()
 		return;
 	}
 
-	//NewKeyEvent.Broadcast(morseCodeData->morseCodeKey);
-
 	morseCodeCurrentDayDataTable = morseCodeData->uniqueDaysMorseCodeData;
 
 	//Get all the time values and Row Names
 	TArray<F_MorseCodeStringsAndEncryption*> allRows;
 	morseCodeCurrentDayDataTable->GetAllRows<F_MorseCodeStringsAndEncryption>("Getting All Time In Minutes", allRows);
-	for (F_MorseCodeStringsAndEncryption* getMinutes : allRows)
+	for (F_MorseCodeStringsAndEncryption* getTimings : allRows)
 	{
-		allRowsOfCurrentDayTime.Add(getMinutes->timeActivatedInMinutes);
+		allRowsOfCurrentDayHours.Add(getTimings->hour);
+		allRowsOfCurrentDayMinutes.Add(getTimings->minute);
 	}
 	allRowsOfCurrentDayName = morseCodeCurrentDayDataTable->GetRowNames();
 
 	//Sends the amount of morse code strings to decode to the Morse Code Input System
-	inputSelectionSystem->SetAmountOfMorseCodeAndKeyForToday(allRowsOfCurrentDayTime.Num(), morseCodeData->morseCodeKey);
+	inputSelectionSystem->SetAmountOfMorseCodeAndKeyForToday(allRowsOfCurrentDayName.Num(), morseCodeData->morseCodeKey);
 
 	//progress the timer every second and checks data table for information;
 	GetWorld()->GetTimerManager().SetTimer(ProgressTimeTimerHandle, this, &ATimeManager::ProgressTime, amountOfSecondsToProgressTime, true);
@@ -94,28 +90,39 @@ void ATimeManager::StartNextDay()
 
 void ATimeManager::ProgressTime()
 {
-	currentTime++;
-	
+	//Function is called on a loop based on this float - amountOfSecondsToProgressTime
+	currentMinute++;
+	if (currentMinute >= 60)
+	{
+		currentMinute = 0;
+		currentHour++;
+	}
 	OnTimeUpdatedEvent.Broadcast();
 
-	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Orange, FString::Printf(TEXT("ProgressTime: Current time is - %d"), currentTime));
-	//UE_LOG(LogTemp, Display, TEXT("ProgressTime: Current time is - %d"), currentTime);
+	//Just to show on screen the time
+	if (currentMinute < 10)
+	{
+		GEngine->AddOnScreenDebugMessage(1, amountOfSecondsToProgressTime, FColor::Orange, FString::Printf(TEXT("ProgressTime: Current time is - %d:0%d"), currentHour, currentMinute));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(1, amountOfSecondsToProgressTime, FColor::Orange, FString::Printf(TEXT("ProgressTime: Current time is - %d:%d"), currentHour, currentMinute));
+	}
 
 	bool bAddedMorseCode = false;
 
-	for (int i = 0; i < allRowsOfCurrentDayTime.Num(); i++)
+	for (int i = 0; i < allRowsOfCurrentDayHours.Num(); i++)
 	{
-		if (currentTime == allRowsOfCurrentDayTime[i])
+		if (currentHour == allRowsOfCurrentDayHours[i] && currentMinute == allRowsOfCurrentDayMinutes[i])
 		{
 			F_MorseCodeStringsAndEncryption* morseCodeData = morseCodeCurrentDayDataTable->FindRow<F_MorseCodeStringsAndEncryption>(allRowsOfCurrentDayName[i], "Finding Row For MorseCodeData");
-			//inputSelectionSystem->EnableButtonAndSetMorseCodeActorInformation(*morseCodeData);
 			inputSelectionSystem->AddMorseCodeInformationToPool(*morseCodeData);
 			bAddedMorseCode = true;
 			break;
 		}
 	}
 
-	if (currentTime % minutesToCheckToAddMorseCode == 0 && !bAddedMorseCode)
+	if ((currentMinute % minutesToCheckToAddMorseCode == 0 || currentMinute == 0) && !bAddedMorseCode)
 	{
 		inputSelectionSystem->CheckIfMorseCodeButtonsAreAvailable();
 	}
@@ -124,11 +131,12 @@ void ATimeManager::ProgressTime()
 void ATimeManager::ResetDayInformation()
 {
 	GetWorld()->GetTimerManager().ClearTimer(ProgressTimeTimerHandle);
-	currentTime = 0;
+	currentMinute = 0;
+	currentHour = 9;
 	morseCodeCurrentDayDataTable = nullptr;
-	allRowsOfCurrentDayTime.Empty();
+	allRowsOfCurrentDayHours.Empty();
+	allRowsOfCurrentDayMinutes.Empty();
 	allRowsOfCurrentDayName.Empty();
 
 	DayResetEvent.Broadcast();
-
 }

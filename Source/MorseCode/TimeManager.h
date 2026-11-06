@@ -32,7 +32,10 @@ public:
 	UDataTable* morseCodeCurrentDayDataTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<int> allRowsOfCurrentDayTime;
+	TArray<int> allRowsOfCurrentDayHours;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<int> allRowsOfCurrentDayMinutes;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FName> allRowsOfCurrentDayName;
@@ -41,7 +44,11 @@ public:
 	AMorseCodeInputSelectionSystem* inputSelectionSystem;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int currentTime;
+	int currentMinute;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int currentHour;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentDay;
