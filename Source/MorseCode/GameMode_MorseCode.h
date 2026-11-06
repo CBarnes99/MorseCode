@@ -15,6 +15,9 @@ public:
 	
 
 	UFUNCTION(BlueprintCallable)
+	void SetNewDayInformation();
+
+	UFUNCTION(BlueprintCallable)
 	void CallToStartNewDayWithDelay();
 
 protected:

@@ -6,6 +6,8 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnTimeUpdatedSigniture)
 DECLARE_MULTICAST_DELEGATE(FDayResetSigniture)
+DECLARE_MULTICAST_DELEGATE_OneParam(FNewKeySigniture, FString)
+DECLARE_MULTICAST_DELEGATE_OneParam(FCurrentDaySigniture, int)
 
 class AMorseCodeInputSelectionSystem;
 
@@ -20,6 +22,8 @@ public:
 
 	FOnTimeUpdatedSigniture OnTimeUpdatedEvent;
 	FDayResetSigniture DayResetEvent;
+	FNewKeySigniture NewKeyEvent;
+	FCurrentDaySigniture CurrentDayEvent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UDataTable* morseCodeDaySelectionDataTable;
@@ -47,6 +51,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int minutesToCheckToAddMorseCode;
+
+	UFUNCTION(BlueprintCallable)
+	void SetNewDayInformation();
 
 	UFUNCTION(BlueprintCallable)
 	void StartNextDay();

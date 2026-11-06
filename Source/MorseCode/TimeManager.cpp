@@ -30,13 +30,14 @@ void ATimeManager::BeginPlay()
 	Super::BeginPlay();
 }
 
-//this needs to be called at the start of the in game day to set the day then kick off the information to the input selection system.
-void ATimeManager::StartNextDay()
+void ATimeManager::SetNewDayInformation()
 {
 	ResetDayInformation();
 
 	currentDay++;
 	UE_LOG(LogTemp, Display, TEXT("StartNextDay: Current day is - %d"), currentDay);
+	CurrentDayEvent.Broadcast(currentDay);
+
 
 	//Set the correct data table for the right day
 	FName dayAsName = FName(*FString::FromInt(currentDay));
@@ -47,6 +48,32 @@ void ATimeManager::StartNextDay()
 		UE_LOG(LogTemp, Error, TEXT("StartNextDay: NO MORSE CODE DATA FOUND, NO MORSE CODE WILL BE ENABLED FROM NOW ON!"));
 		return;
 	}
+
+	NewKeyEvent.Broadcast(morseCodeData->morseCodeKey);
+}
+
+//this needs to be called at the start of the in game day to set the day then kick off the information to the input selection system.
+void ATimeManager::StartNextDay()
+{
+	//ResetDayInformation();
+
+	//currentDay++;
+	//UE_LOG(LogTemp, Display, TEXT("StartNextDay: Current day is - %d"), currentDay);
+	//CurrentDayEvent.Broadcast(currentDay);
+
+
+	//Set the correct data table for the right day
+	FName dayAsName = FName(*FString::FromInt(currentDay));
+	F_MorseCodeDaySelection* morseCodeData = morseCodeDaySelectionDataTable->FindRow<F_MorseCodeDaySelection>(dayAsName, "Finding Morse Code Day Data Table");
+
+	if (!morseCodeData)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartNextDay: NO MORSE CODE DATA FOUND, NO MORSE CODE WILL BE ENABLED FROM NOW ON!"));
+		return;
+	}
+
+	//NewKeyEvent.Broadcast(morseCodeData->morseCodeKey);
+
 	morseCodeCurrentDayDataTable = morseCodeData->uniqueDaysMorseCodeData;
 
 	//Get all the time values and Row Names

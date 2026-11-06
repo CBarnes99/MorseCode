@@ -6,7 +6,7 @@ void AGameMode_MorseCode::StartPlay()
 {
 	Super::StartPlay();
 
-	delayToStartNewDay = 3.f;
+	delayToStartNewDay = 0.5f;
 
 	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
 	timeManager = Cast<ATimeManager>(actor);
@@ -16,7 +16,14 @@ void AGameMode_MorseCode::StartPlay()
 		UE_LOG(LogTemp, Error, TEXT("StartPlay: Time Manager Not Set!!"));
 	}
 	
+	SetNewDayInformation();
+
 	//CallToStartNewDayWithDelay();
+}
+
+void AGameMode_MorseCode::SetNewDayInformation()
+{
+	timeManager->SetNewDayInformation();
 }
 
 void AGameMode_MorseCode::CallToStartNewDayWithDelay()

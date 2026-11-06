@@ -8,7 +8,7 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	dotTimeLength = 0.3f;
+	dotTimeLength = 0.35f;
 	dashTimeLength = dotTimeLength * 3;
 	delayBetweenDotsAndDashes = dotTimeLength;
 	delayBetweenCharacters = dotTimeLength * 3;

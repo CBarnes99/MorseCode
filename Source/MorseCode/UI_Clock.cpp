@@ -12,7 +12,7 @@ void UUI_Clock::NativeConstruct()
 
 void UUI_Clock::ProgressTime()
 {
-	if (hour > 9 && minute == 0)
+	if (hour > 16 && minute == 0)
 		return;
 
 	minute++;
@@ -23,9 +23,6 @@ void UUI_Clock::ProgressTime()
 		hour++;
 	}
 
-	
-
-
 	if (minute < 10)
 	{
 		timeAsText->SetText(FText::FromString(FString::Printf(TEXT("%d:0%d"), hour, minute)));
@@ -33,7 +30,6 @@ void UUI_Clock::ProgressTime()
 	else
 	{
 		timeAsText->SetText(FText::FromString(FString::Printf(TEXT("%d:%d"), hour, minute)));
-
 	}
 }
 
