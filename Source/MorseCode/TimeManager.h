@@ -49,7 +49,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentHour;
 
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int currentDay;
 
@@ -67,6 +66,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ProgressTime();
+
+	UFUNCTION(BlueprintCallable)
+	void StopProgressingTime();
 
 protected:
 

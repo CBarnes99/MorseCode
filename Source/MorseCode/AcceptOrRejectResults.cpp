@@ -87,7 +87,8 @@ void AAcceptOrRejectResults::CheckIfAllMorseCodeIsComplete()
 			UE_LOG(LogTemp, Error, TEXT("CheckIfAllMorseCodeIsComplete: GAME MODE NOT FOUND, CANT RESET DAY!"));
 			return;
 		}
-		gameMode->SetNewDayInformation();
+		//gameMode->SetNewDayInformation();
+		gameMode->CallDayEnded();
 
 		OnAllMorseCodeFinishedEvent.ExecuteIfBound();
 

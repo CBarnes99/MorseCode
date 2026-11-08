@@ -4,6 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "UI_Clock.generated.h"
 
+DECLARE_DELEGATE(FTimeReachedSigniture)
+
 class UTextBlock;
 
 UCLASS()
@@ -12,6 +14,8 @@ class MORSECODE_API UUI_Clock : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+
+	FTimeReachedSigniture FTimeReachedEvent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* timeAsText;
@@ -32,4 +36,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int minute;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int hourToEndDay;
 };

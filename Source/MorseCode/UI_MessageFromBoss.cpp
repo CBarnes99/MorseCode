@@ -3,6 +3,7 @@
 
 void UUI_MessageFromBoss::NativeConstruct()
 {
+	Super::NativeConstruct();
 	currentKey.Empty();
 	currentMessage.Empty();
 }

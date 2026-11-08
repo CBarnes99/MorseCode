@@ -4,6 +4,7 @@
 
 void UUI_NotepadInput::NativeConstruct()
 {
+	Super::NativeConstruct();
 	textInput->OnTextCommitted.AddUniqueDynamic(this, &UUI_NotepadInput::OnTextCommitted);
 }
 

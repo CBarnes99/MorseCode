@@ -130,7 +130,6 @@ void ATimeManager::ProgressTime()
 
 void ATimeManager::ResetDayInformation()
 {
-	GetWorld()->GetTimerManager().ClearTimer(ProgressTimeTimerHandle);
 	currentMinute = 0;
 	currentHour = 9;
 	morseCodeCurrentDayDataTable = nullptr;
@@ -139,4 +138,9 @@ void ATimeManager::ResetDayInformation()
 	allRowsOfCurrentDayName.Empty();
 
 	DayResetEvent.Broadcast();
+}
+
+void ATimeManager::StopProgressingTime()
+{
+	GetWorld()->GetTimerManager().ClearTimer(ProgressTimeTimerHandle);
 }

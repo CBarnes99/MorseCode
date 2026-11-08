@@ -40,8 +40,8 @@ void UAC_MorseCodeComponent::BeginPlay()
 
 void UAC_MorseCodeComponent::StartMorseCode(AActor* actorStartingMorseCode)
 {
-	UE_LOG(LogTemp, Warning, TEXT("StartMorseCode: %s has started Morse Code!"), *actorStartingMorseCode->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("StartMorseCode: Current Text is - %s"), *currentString);
+	UE_LOG(LogTemp, Display, TEXT("StartMorseCode: %s has started Morse Code!"), *actorStartingMorseCode->GetName());
+	UE_LOG(LogTemp, Display, TEXT("StartMorseCode: Current Text is - %s"), *currentString);
 
 	if (!morseCodeDataTable)
 	{

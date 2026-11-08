@@ -3,8 +3,11 @@
 
 void UUI_Clock::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	minute = 0;
 	hour = 9;
+	hourToEndDay = 17;
 
 	timeAsText->SetText(FText::FromString(FString::Printf(TEXT("%d:0%d"), hour, minute)));
 
@@ -12,8 +15,12 @@ void UUI_Clock::NativeConstruct()
 
 void UUI_Clock::ProgressTime()
 {
-	if (hour > 16 && minute == 0)
+
+	if (hour > hourToEndDay - 1 && minute == 0)
+	{
+		FTimeReachedEvent.ExecuteIfBound();
 		return;
+	}
 
 	minute++;
 
@@ -37,6 +44,5 @@ void UUI_Clock::ResetClock()
 {
 	minute = 0;
 	hour = 9;
-
 	timeAsText->SetText(FText::FromString(FString::Printf(TEXT("%d:0%d"), hour, minute)));
 }

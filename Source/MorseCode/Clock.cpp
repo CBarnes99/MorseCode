@@ -4,6 +4,7 @@
 #include "UI_Clock.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameMode_MorseCode.h"
 
 AClock::AClock()
 {
@@ -18,8 +19,6 @@ AClock::AClock()
 	clockWidgetComp->SetDrawSize(FVector2D(512.f, 512.f));
 	clockWidgetComp->SetPivot(FVector2D(0.5f, 0.5f));
 	clockWidgetComp->SetTwoSided(false);
-
-
 }
 
 
@@ -46,9 +45,8 @@ void AClock::SetTimeManagerAndWidget()
 		return;
 	}
 
-	//clockUIWidget->AddToViewport();
 	clockWidgetComp->SetWidget(clockUIWidget);
-
+	clockUIWidget->FTimeReachedEvent.BindUObject(this, &AClock::StopClock);
 
 
 	//Get Time Manager and get Delegate to progress time
@@ -73,4 +71,16 @@ void AClock::ProgressTimeInUI()
 void AClock::ResetTimeInUI()
 {
 	clockUIWidget->ResetClock();
+}
+
+void AClock::StopClock()
+{
+	AGameMode_MorseCode* gameMode = GetWorld()->GetAuthGameMode<AGameMode_MorseCode>();
+
+	if (!gameMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StopClock: GAME MODE NOT FOUND IN CLOCK!"));
+		return;
+	}
+	gameMode->CallDayEnded();
 }

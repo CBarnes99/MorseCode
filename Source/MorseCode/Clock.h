@@ -46,4 +46,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void ResetTimeInUI();
+
+	UFUNCTION(BlueprintCallable)
+	void StopClock();
 };

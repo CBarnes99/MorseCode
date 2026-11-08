@@ -46,7 +46,7 @@ void AStartButton::Interact(AActor* interactor)
 	}
 
 	bIsEnabled = false;
-	gameMode->CallToStartNewDayWithDelay();
+	gameMode->CallToSetNewDayWithDelay();
 }
 
 
