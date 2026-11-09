@@ -1,14 +1,18 @@
 #include "Audio_MorseCodeActor.h"
 #include "Components/AudioComponent.h"
+#include "Components/SceneComponent.h"
 
 
 AAudio_MorseCodeActor::AAudio_MorseCodeActor()
 {
+	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("Scene Root"));
+	RootComponent = sceneComp;
+
 	audioCompDot = CreateDefaultSubobject<UAudioComponent>(TEXT("Dot SFX"));
 	audioCompDash = CreateDefaultSubobject<UAudioComponent>(TEXT("Dash SFX"));
 
-	audioCompDot->SetupAttachment(RootComponent);
-	audioCompDash->SetupAttachment(RootComponent);
+	audioCompDot->SetupAttachment(sceneComp);
+	audioCompDash->SetupAttachment(sceneComp);
 
 	audioCompDot->bAutoActivate = false;
 	audioCompDash->bAutoActivate = false;

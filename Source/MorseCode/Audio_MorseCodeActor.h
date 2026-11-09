@@ -5,6 +5,7 @@
 #include "Audio_MorseCodeActor.generated.h"
 
 class UAudioComponent;
+class USceneComponent;
 
 UCLASS()
 class MORSECODE_API AAudio_MorseCodeActor : public AMorseCodeActor
@@ -33,5 +34,8 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USceneComponent* sceneComp;
 
 };
