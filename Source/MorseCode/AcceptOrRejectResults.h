@@ -5,6 +5,7 @@
 #include "AcceptOrRejectResults.generated.h"
 
 DECLARE_DELEGATE(FOnAllMorseCodeFinishedSigniture)
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FSetTotalCorrectIncorrectValuesSigniture, int /* total */, int /* Correrct */, int /* Incorrect */)
 
 class AMorseCodeInputSelectionSystem;
 
@@ -17,6 +18,7 @@ public:
 	AAcceptOrRejectResults();
 
 	FOnAllMorseCodeFinishedSigniture OnAllMorseCodeFinishedEvent;
+	FSetTotalCorrectIncorrectValuesSigniture SetTotalCorrectIncorrectValuesEvent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AMorseCodeInputSelectionSystem* morseCodeInputSelectionSystem;

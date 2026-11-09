@@ -20,21 +20,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	APlayerCharacter* playerCharacter;
 
+
+	UFUNCTION(BlueprintCallable)
+	void EnableMappingContext(bool bEnable);
+
 protected:
 	
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	virtual void OnPossess(APawn* InPawn) override;
-
-	UFUNCTION(BlueprintCallable)
-	void Move(const FInputActionValue& InputValue);
-
-	UFUNCTION(BlueprintCallable)
-	void Look(const FInputActionValue& InputValue);
-
-	UFUNCTION(BlueprintCallable)
-	void Click();
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* movementMappingContext;
@@ -47,4 +41,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* clickAction;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FTransform playerStartingTransform;
+
+
+	UFUNCTION(BlueprintCallable)
+	void Move(const FInputActionValue& InputValue);
+
+	UFUNCTION(BlueprintCallable)
+	void Look(const FInputActionValue& InputValue);
+
+	UFUNCTION(BlueprintCallable)
+	void Click();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerToStartingLocation();
 };

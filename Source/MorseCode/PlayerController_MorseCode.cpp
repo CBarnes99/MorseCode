@@ -7,10 +7,7 @@ void APlayerController_MorseCode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (UEnhancedInputLocalPlayerSubsystem* enhancedInputSubSystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
-	{
-		enhancedInputSubSystem->AddMappingContext(movementMappingContext, 0);
-	}
+	EnableMappingContext(true);
 }
 
 void APlayerController_MorseCode::OnPossess(APawn* InPawn)
@@ -22,6 +19,9 @@ void APlayerController_MorseCode::OnPossess(APawn* InPawn)
 	{
 		UE_LOG(LogTemp, Error, TEXT("OnPossess: Player Character Not Assigned In Player Controller!"));
 	}
+
+	playerStartingTransform = playerCharacter->GetTransform();
+
 }
 
 void APlayerController_MorseCode::SetupInputComponent()
@@ -73,4 +73,36 @@ void APlayerController_MorseCode::Click()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Click: Player Character Is Not VALID!!"));
 	}
+}
+
+void APlayerController_MorseCode::EnableMappingContext(bool bEnable)
+{
+	if (bEnable)
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* enhancedInputSubSystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			enhancedInputSubSystem->AddMappingContext(movementMappingContext, 0);
+			SetShowMouseCursor(false);
+			SetPlayerToStartingLocation();
+		}
+	}
+	else
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* enhancedInputSubSystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			enhancedInputSubSystem->RemoveMappingContext(movementMappingContext);
+			SetShowMouseCursor(true);
+		}
+	}	
+}
+
+void APlayerController_MorseCode::SetPlayerToStartingLocation()
+{
+	if (!playerCharacter)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SetPlayerToStartingLocation: PLAYER CHARACTER NOT VALID IN PLAYER CONTROLLER!!"));
+		return;
+	}
+	
+	playerCharacter->SetActorTransform(playerStartingTransform);
 }

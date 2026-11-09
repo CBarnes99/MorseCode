@@ -78,6 +78,7 @@ void AAcceptOrRejectResults::CheckIfAllMorseCodeIsComplete()
 	if (correctResults + incorrectResults == amountOfMorseCodeForToday)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CheckIfAllMorseCodeIsComplete: All Morse Code done! Amount Correct - %d, Amount Incorrect - %d"), correctResults, incorrectResults);
+		SetTotalCorrectIncorrectValuesEvent.Broadcast(amountOfMorseCodeForToday, correctResults, incorrectResults);
 		ResetResults();
 
 		AGameMode_MorseCode* gameMode = GetWorld()->GetAuthGameMode<AGameMode_MorseCode>();

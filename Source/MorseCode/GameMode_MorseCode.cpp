@@ -1,7 +1,9 @@
 #include "GameMode_MorseCode.h"
 #include <Kismet/GameplayStatics.h>
 #include "TimeManager.h"
-#include "UI_FadeToBlack.h"
+#include "EndDayScreen.h"
+#include "PlayerController_MorseCode.h"
+#include <Kismet/GameplayStatics.h>
 
 void AGameMode_MorseCode::StartPlay()
 {
@@ -10,23 +12,31 @@ void AGameMode_MorseCode::StartPlay()
 	delayToStartNewDay = 0.5f;
 	bHasDayEnded = true;
 
-	UUserWidget* widget = CreateWidget(GetWorld(), fadeToBlackWidgetClass);
-	fadeToBlackWidget = Cast<UUI_FadeToBlack>(widget);
-	if (!fadeToBlackWidget)
+	playerController = Cast<APlayerController_MorseCode>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (!playerController)
 	{
-		UE_LOG(LogTemp, Error, TEXT("StartPlay: Fade to black widget not created correctly in game mode!!"));
+		UE_LOG(LogTemp, Error, TEXT("StartPlay: PLAYER CONTROLLER NOT FOUND IN GAME MODE!!"));
 		return;
 	}
-	fadeToBlackWidget->AddToViewport();
-	fadeToBlackWidget->SetVisibility(ESlateVisibility::Collapsed);
 
+	//Gets and sets end screen actor
+	AActor* endScreen = UGameplayStatics::GetActorOfClass(GetWorld(), AEndDayScreen::StaticClass());
+	endDayScreenActor = Cast<AEndDayScreen>(endScreen);
+	if (!endDayScreenActor)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartPlay: End Day Screen Actor Not Set!!"));
+		return;
+	}
+	endDayScreenActor->StartNextDayButtonPressedEvent.BindUObject(this, &AGameMode_MorseCode::DayStart);
 
+	//Gets and sets time manager actor
 	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
 	timeManager = Cast<ATimeManager>(actor);
 
 	if (!timeManager)
 	{
 		UE_LOG(LogTemp, Error, TEXT("StartPlay: Time Manager Not Set!!"));
+		return;
 	}
 	
 	DayStart();
@@ -36,11 +46,11 @@ void AGameMode_MorseCode::CallDayEnded()
 {
 	if (!bHasDayEnded)
 	{
-		PlayFadeAnimation(true);
 		bHasDayEnded = true;
 		timeManager->StopProgressingTime();
 
-		GetWorld()->GetTimerManager().SetTimer(DelayForNewDayTimerHandle, this, &AGameMode_MorseCode::DayStart, 3.f, false);
+		endDayScreenActor->PlayFadeAnimation(true);
+		EnablePlayerMovement(false);
 
 	}
 }
@@ -49,9 +59,10 @@ void AGameMode_MorseCode::DayStart()
 {
 	if (bHasDayEnded)
 	{
-		PlayFadeAnimation(false);
+		endDayScreenActor->PlayFadeAnimation(false);
 		bHasDayEnded = false;
 		SetNewDayInformation();
+		EnablePlayerMovement(true);
 	}
 }
 
@@ -73,13 +84,7 @@ void AGameMode_MorseCode::SetNewDayMorseCodeInfo()
 	timeManager->StartNextDay();
 }
 
-void AGameMode_MorseCode::PlayFadeAnimation(bool bPlayAnimationForward)
+void AGameMode_MorseCode::EnablePlayerMovement(bool bEnable)
 {
-	if (!fadeToBlackWidget)
-	{
-		UE_LOG(LogTemp, Error, TEXT("PlayFadeAnimation: Fade to black widget not created correctly in game mode!!"));
-		return;
-	}
-
-	fadeToBlackWidget->PlayFadeAnimation(bPlayAnimationForward);
+	playerController->EnableMappingContext(bEnable);
 }

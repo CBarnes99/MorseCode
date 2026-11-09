@@ -36,7 +36,7 @@ void ATimeManager::SetNewDayInformation()
 {
 	ResetDayInformation();
 
-	//Updates new day and sends out broudcast to update actors with new day as an int
+	//Updates new day and sends out Broadcast to update actors with new day as an int
 	currentDay++;
 	UE_LOG(LogTemp, Display, TEXT("StartNextDay: Current day is - %d"), currentDay);
 	CurrentDayEvent.Broadcast(currentDay);
@@ -83,7 +83,7 @@ void ATimeManager::StartNextDay()
 
 	//Sends the amount of morse code strings to decode to the Morse Code Input System
 	inputSelectionSystem->SetAmountOfMorseCodeAndKeyForToday(allRowsOfCurrentDayName.Num(), morseCodeData->morseCodeKey);
-
+	
 	//progress the timer every second and checks data table for information;
 	GetWorld()->GetTimerManager().SetTimer(ProgressTimeTimerHandle, this, &ATimeManager::ProgressTime, amountOfSecondsToProgressTime, true);
 }

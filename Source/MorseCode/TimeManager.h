@@ -73,7 +73,6 @@ public:
 protected:
 
 	FTimerHandle ProgressTimeTimerHandle;
-	//FTimerHandle DelayForNewDayTimerHandle;
 
 	virtual void BeginPlay() override;
 

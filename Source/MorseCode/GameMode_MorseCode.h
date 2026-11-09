@@ -5,7 +5,8 @@
 #include "GameMode_MorseCode.generated.h"
 
 class ATimeManager;
-class UUI_FadeToBlack;
+class AEndDayScreen;
+class APlayerController_MorseCode;
 
 UCLASS()
 class MORSECODE_API AGameMode_MorseCode : public AGameModeBase
@@ -14,7 +15,6 @@ class MORSECODE_API AGameMode_MorseCode : public AGameModeBase
 	
 public:
 	
-
 	UFUNCTION(BlueprintCallable)
 	void CallDayEnded();
 
@@ -32,6 +32,9 @@ protected:
 	virtual void StartPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	APlayerController_MorseCode* playerController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ATimeManager* timeManager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -40,17 +43,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bHasDayEnded;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<UUserWidget> fadeToBlackWidgetClass;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UUI_FadeToBlack* fadeToBlackWidget;
+	AEndDayScreen* endDayScreenActor;
 
 	UFUNCTION(BlueprintCallable)
 	void SetNewDayMorseCodeInfo();
 
 	UFUNCTION(BlueprintCallable)
-	void PlayFadeAnimation(bool bPlayAnimationForward);
+	void EnablePlayerMovement(bool bEnable);
 
 	FTimerHandle DelayForNewDayTimerHandle;
 };
