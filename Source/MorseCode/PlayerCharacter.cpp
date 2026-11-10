@@ -57,15 +57,15 @@ void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
 }
 
 
-void APlayerCharacter::Move(const FInputActionValue& InputValue)
-{
-	const FVector2D MovementVector = InputValue.Get<FVector2D>();
-	const FVector Forward = GetActorForwardVector();
-	const FVector Right = GetActorRightVector();
-
-	AddMovementInput(Forward, MovementVector.Y);
-	AddMovementInput(Right, MovementVector.X);
-}
+//void APlayerCharacter::Move(const FInputActionValue& InputValue)
+//{
+//	const FVector2D MovementVector = InputValue.Get<FVector2D>();
+//	const FVector Forward = GetActorForwardVector();
+//	const FVector Right = GetActorRightVector();
+//
+//	AddMovementInput(Forward, MovementVector.Y);
+//	AddMovementInput(Right, MovementVector.X);
+//}
 
 void APlayerCharacter::Look(const FInputActionValue& InputValue)
 {

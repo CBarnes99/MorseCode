@@ -33,8 +33,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* movementMappingContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	UInputAction* moveAction;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	//UInputAction* moveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* lookAction;
@@ -46,8 +46,8 @@ protected:
 	FTransform playerStartingTransform;
 
 
-	UFUNCTION(BlueprintCallable)
-	void Move(const FInputActionValue& InputValue);
+	//UFUNCTION(BlueprintCallable)
+	//void Move(const FInputActionValue& InputValue);
 
 	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& InputValue);

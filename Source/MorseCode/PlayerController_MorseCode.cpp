@@ -31,23 +31,23 @@ void APlayerController_MorseCode::SetupInputComponent()
 	//Binds the Input Actions assigned in the editor to the corisponding functions
 	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(InputComponent))
 	{
-		Input->BindAction(moveAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Move);
+		//Input->BindAction(moveAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Move);
 		Input->BindAction(lookAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Look);
 		Input->BindAction(clickAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Click);
 	}
 }
 
-void APlayerController_MorseCode::Move(const FInputActionValue& InputValue)
-{
-	if (IsValid(playerCharacter))
-	{
-		playerCharacter->Move(InputValue);		
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Move: Player Character Is Not VALID!!"));
-	}
-}
+//void APlayerController_MorseCode::Move(const FInputActionValue& InputValue)
+//{
+//	if (IsValid(playerCharacter))
+//	{
+//		playerCharacter->Move(InputValue);		
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Error, TEXT("Move: Player Character Is Not VALID!!"));
+//	}
+//}
 
 void APlayerController_MorseCode::Look(const FInputActionValue& InputValue)
 {
