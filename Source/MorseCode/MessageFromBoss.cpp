@@ -6,13 +6,17 @@
 #include "UI_MessageFromBoss.h"
 #include <Kismet/GameplayStatics.h>
 #include "TimeManager.h"
+#include "Components/SceneComponent.h"
 
 AMessageFromBoss::AMessageFromBoss()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	sceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Scene Root"));
+	RootComponent = sceneRoot;
+
 	baseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
-	RootComponent = baseMesh;
+	baseMesh->SetupAttachment(sceneRoot);
 
 	messageWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("Message Widget"));
 	messageWidgetComp->SetupAttachment(baseMesh);

@@ -5,6 +5,7 @@
 #include "MessageFromBoss.generated.h"
 
 class UStaticMeshComponent;
+class USceneComponent;
 class UWidgetComponent;
 class UUI_MessageFromBoss;
 
@@ -22,6 +23,9 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USceneComponent* sceneRoot;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* baseMesh;

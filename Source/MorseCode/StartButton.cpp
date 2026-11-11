@@ -8,9 +8,8 @@ AStartButton::AStartButton()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	buttonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Button Mesh"));
+	buttonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Button Base Mesh"));
 	RootComponent = buttonMesh;
-
 }
 
 void AStartButton::BeginPlay()
@@ -45,7 +44,7 @@ void AStartButton::Interact(AActor* interactor)
 		UE_LOG(LogTemp, Error, TEXT("Interact: GAME MODE NOT FOUND IN START BUTTON!"));
 	}
 
-	bIsEnabled = false;
+	SetButtonToDisabled();
 	gameMode->CallToSetNewDayWithDelay();
 }
 
@@ -54,4 +53,10 @@ void AStartButton::SetButtonToEnabled()
 {
 	bIsEnabled = true;
 	UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: Start button is Enabled!"));
+}
+
+void AStartButton::SetButtonToDisabled()
+{
+	bIsEnabled = false;
+	UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: Start button is Disabled!"));
 }

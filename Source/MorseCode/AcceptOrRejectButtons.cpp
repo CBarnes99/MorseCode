@@ -9,6 +9,11 @@ AAcceptOrRejectButtons::AAcceptOrRejectButtons()
 	buttonMesh->SetupAttachment(RootComponent);
 }
 
+void AAcceptOrRejectButtons::SetButtonMaterial(UMaterialInterface* material)
+{
+	buttonMesh->SetMaterial(0, material);
+}
+
 void AAcceptOrRejectButtons::BeginPlay()
 {
 	Super::BeginPlay();

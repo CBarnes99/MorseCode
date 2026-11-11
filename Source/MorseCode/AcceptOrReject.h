@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AAcceptOrRejectButtons*> buttonsArray;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UDataTable* buttonMaterials;
+
 	UFUNCTION(BlueprintCallable)
 	void ButtonPressed(bool value);
 

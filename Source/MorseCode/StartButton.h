@@ -29,4 +29,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SetButtonToEnabled();
 
+	UFUNCTION(BlueprintCallable)
+	void SetButtonToDisabled();
+
+
 };

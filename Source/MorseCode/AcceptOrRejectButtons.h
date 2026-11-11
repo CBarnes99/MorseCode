@@ -23,12 +23,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AcceptOrReject")
 	bool AcceptOrReject;
 
-	virtual void Interact(AActor* interactor) override;
+	UFUNCTION(BlueprintCallable)
+	void SetButtonMaterial(UMaterialInterface* material);
 
+	virtual void Interact(AActor* interactor) override;
 
 protected:
 
 	virtual void BeginPlay() override;
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* buttonMesh;
