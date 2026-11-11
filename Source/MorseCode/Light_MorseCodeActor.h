@@ -5,6 +5,7 @@
 #include "Light_MorseCodeActor.generated.h"
 
 class UPointLightComponent;
+class UAudioComponent;
 
 UCLASS()
 class MORSECODE_API ALight_MorseCodeActor : public AMorseCodeActor
@@ -18,6 +19,9 @@ public:
 	/** The light that turns on and off */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UPointLightComponent* morseCodeLight;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UAudioComponent* morseCodeBeepSFX;
 
 	virtual void MorseCodeOn(float duration, bool bIsDot) override;
 
