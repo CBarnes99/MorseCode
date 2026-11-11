@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "I_Interactable.h"
+#include "F_ButtonMaterials.h"
 #include "StartButton.generated.h"
 
 class UStaticMeshComponent;
@@ -24,6 +25,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	bool bIsEnabled;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UDataTable* buttonMaterialsDT;
+
 	virtual void Interact(AActor* interactor) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -31,6 +35,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void SetButtonToDisabled();
+
+	UFUNCTION(BlueprintCallable)
+	void SetButtonMaterial(FName colourName);
 
 
 };
