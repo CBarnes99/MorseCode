@@ -45,7 +45,7 @@ public:
 	UChildActorComponent* buttonComponent3;
 
 	/** The actor that accepts or rejects the morse code that is currently being signaled */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AAcceptOrReject* acceptOrRejectActor;
 	/** When button pressed, toggle morse code actor on or off */
 	UFUNCTION(BlueprintCallable)

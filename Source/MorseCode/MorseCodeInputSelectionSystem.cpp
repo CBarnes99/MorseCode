@@ -72,6 +72,10 @@ void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
 		button->ButtonPressedEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode);
 	}
 
+
+	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), AAcceptOrReject::StaticClass());
+	acceptOrRejectActor = Cast<AAcceptOrReject>(actor);
+
 	if (!acceptOrRejectActor)
 	{
 		UE_LOG(LogTemp, Error, TEXT("AddButtonsToArrayAndBindDelegates: ACCEPT OR REJECT ACTOR NOT VALID!!"));

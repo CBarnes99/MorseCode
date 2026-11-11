@@ -20,7 +20,7 @@ public:
 	FOnAllMorseCodeFinishedSigniture OnAllMorseCodeFinishedEvent;
 	FSetTotalCorrectIncorrectValuesSigniture SetTotalCorrectIncorrectValuesEvent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AMorseCodeInputSelectionSystem* morseCodeInputSelectionSystem;
 
 protected:

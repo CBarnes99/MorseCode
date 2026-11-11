@@ -1,6 +1,7 @@
 #include "AcceptOrRejectResults.h"
 #include "MorseCodeInputSelectionSystem.h"
 #include "GameMode_MorseCode.h"
+#include <Kismet/GameplayStatics.h>
 
 AAcceptOrRejectResults::AAcceptOrRejectResults()
 {
@@ -19,6 +20,9 @@ void AAcceptOrRejectResults::BeginPlay()
 
 void AAcceptOrRejectResults::BindDelegates()
 {
+	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), AMorseCodeInputSelectionSystem::StaticClass());
+	morseCodeInputSelectionSystem = Cast<AMorseCodeInputSelectionSystem>(actor);
+
 	if (!morseCodeInputSelectionSystem)
 	{
 		UE_LOG(LogTemp, Error, TEXT("BindDelegates: MORSE CODE INPUT SELECTION SYSTEM NOT BOUND IN - %s"), *GetName());
