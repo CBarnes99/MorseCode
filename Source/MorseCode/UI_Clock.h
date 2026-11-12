@@ -7,6 +7,7 @@
 DECLARE_DELEGATE(FTimeReachedSigniture)
 
 class UTextBlock;
+class UWidgetAnimation;
 
 UCLASS()
 class MORSECODE_API UUI_Clock : public UUserWidget
@@ -26,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetClock();
 
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* timeFlicker;
+
 protected:
 
 	virtual void NativeConstruct() override;
@@ -38,4 +42,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int hourToEndDay;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsFlickering;
+
+	UFUNCTION(BlueprintCallable)
+	void StartFlickerAnimation();
 };

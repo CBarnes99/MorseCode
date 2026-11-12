@@ -63,6 +63,8 @@ void ATimeManager::SetNewDayInformation()
 
 	//Sends out the current key as a string
 	NewKeyEvent.Broadcast(morseCodeData->morseCodeKey);
+
+	inputSelectionSystem->DisableAllMorseCodeActors();
 }
 
 void ATimeManager::StartNextDay()
