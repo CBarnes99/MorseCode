@@ -81,6 +81,16 @@ ASelectionSwitch::ASelectionSwitch()
 		UE_LOG(LogTemp, Error, TEXT("ASelectionSwitch: Switch Off SFX not set within - %s"), *this->GetName());
 	}
 
+	static ConstructorHelpers::FObjectFinder<USoundWave> switchEnabledFXCheck(TEXT("/Game/SFX/SW_SwitchEnabledSFX.SW_SwitchEnabledSFX"));
+	if (switchEnabledFXCheck.Succeeded())
+	{
+		switchEnabledSFX = switchEnabledFXCheck.Object;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASelectionSwitch: Switch Enabled SFX not set within - %s"), *this->GetName());
+	}
+
 	static ConstructorHelpers::FObjectFinder<UDataTable> lightMaterialsDTCheck(TEXT("/Game/DataTables/DT_SelectionSwitchLightMaterials.DT_SelectionSwitchLightMaterials"));
 	if (lightMaterialsDTCheck.Succeeded())
 	{
@@ -155,6 +165,9 @@ void ASelectionSwitch::SetButtonToEnabled()
 	UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: %s - Is Enabled"), *GetName());
 
 	SetLightMaterial("Orange");
+	audioComponent->Stop();
+	audioComponent->SetSound(switchEnabledSFX);
+	audioComponent->Play();
 	
 }
 

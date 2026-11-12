@@ -66,6 +66,10 @@ public:
 	/** The sound effect for when the switch is turned on */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SFX")
 	USoundBase* switchOffSFX;
+
+	/** The sound effect for when the switch is turned on */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SFX")
+	USoundBase* switchEnabledSFX;
 	
 	/** When interact is called but the player, presses button and calls ButtonPressedEvent */
 	virtual void Interact(AActor* interactor) override;
