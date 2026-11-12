@@ -3,6 +3,7 @@
 #include "F_MorseCodeDaySelection.h"
 #include "F_MorseCodeStringsAndEncryption.h"
 #include "MorseCodeInputSelectionSystem.h"
+#include <Kismet/GameplayStatics.h>
 
 ATimeManager::ATimeManager()
 {
@@ -30,6 +31,14 @@ ATimeManager::ATimeManager()
 void ATimeManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), AMorseCodeInputSelectionSystem::StaticClass());
+	inputSelectionSystem = Cast<AMorseCodeInputSelectionSystem>(actor);
+	if (!inputSelectionSystem)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BeginPlay: Morse Code Input Selection system note set within - %s"), *GetName());
+		return;
+	}
 }
 
 void ATimeManager::SetNewDayInformation()

@@ -40,7 +40,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FName> allRowsOfCurrentDayName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AMorseCodeInputSelectionSystem* inputSelectionSystem;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

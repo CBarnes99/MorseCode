@@ -10,7 +10,7 @@ DECLARE_DELEGATE_TwoParams(FOnAcceptOrRejectRecievedSigniture, bool /* value */,
 DECLARE_DELEGATE_TwoParams(FAmountOfMorseCodeAndKeyForTodaySigniture, int /* The value of the amount of morse code for today */, FString /* Current Key */)
 
 class UChildActorComponent;
-class ASelectionButton;
+class ASelectionSwitch;
 class AMorseCodeActor;
 class AAcceptOrReject;
 
@@ -49,7 +49,7 @@ public:
 	AAcceptOrReject* acceptOrRejectActor;
 	/** When button pressed, toggle morse code actor on or off */
 	UFUNCTION(BlueprintCallable)
-	void ButtonPressedToggleMorseCode(ASelectionButton* buttonPressed);
+	void ButtonPressedToggleMorseCode(ASelectionSwitch* buttonPressed);
 
 	/** When the time manager finds a correct time, sends information to this actor to enable button and sets information in the morse code actor */
 	UFUNCTION(BlueprintCallable)
@@ -67,7 +67,7 @@ protected:
 
 	/** An array of all the button actors */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	TArray<ASelectionButton*> buttonArray;
+	TArray<ASelectionSwitch*> buttonArray;
 
 	/** An array of all the morse code actors */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
@@ -77,7 +77,7 @@ protected:
 	AMorseCodeActor* currentMorseCodeActor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	ASelectionButton* currentButtonActor;
+	ASelectionSwitch* currentButtonActor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	TArray<F_MorseCodeStringsAndEncryption> morseCodeInformationPool;

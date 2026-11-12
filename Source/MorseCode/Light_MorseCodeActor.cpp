@@ -9,14 +9,14 @@ ALight_MorseCodeActor::ALight_MorseCodeActor()
 	morseCodeLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Morse Code Light"));
 	morseCodeLight->SetupAttachment(RootComponent);
 
-	morseCodeBeepSFX = CreateDefaultSubobject<UAudioComponent>(TEXT("Morse Code Beep SFX"));
-	morseCodeBeepSFX->SetupAttachment(RootComponent);
-	morseCodeBeepSFX->SetAutoActivate(false);
+	morseCodeLightSFX = CreateDefaultSubobject<UAudioComponent>(TEXT("Morse Code Beep SFX"));
+	morseCodeLightSFX->SetupAttachment(RootComponent);
+	morseCodeLightSFX->SetAutoActivate(false);
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> morseCodeSFX(TEXT("/Game/SFX/MorseCodeBeep.MorseCodeBeep"));
 	if (morseCodeSFX.Succeeded())
 	{
-		morseCodeBeepSFX->SetSound(morseCodeSFX.Object);
+		morseCodeLightSFX->SetSound(morseCodeSFX.Object);
 	}
 	else
 	{
@@ -38,20 +38,20 @@ void ALight_MorseCodeActor::MorseCodeOn(float duration, bool bIsDot)
 {
 	UE_LOG(LogTemp, Display, TEXT("LightOn: Light is on"));
 	morseCodeLight->SetVisibility(true);
-	morseCodeBeepSFX->Play();
+	morseCodeLightSFX->Play();
 }
 
 void ALight_MorseCodeActor::MorseCodeOff()
 {
 	UE_LOG(LogTemp, Display, TEXT("LightOff: Light is off"));
 	morseCodeLight->SetVisibility(false);
-	morseCodeBeepSFX->Stop();
+	morseCodeLightSFX->Stop();
 }
 
 void ALight_MorseCodeActor::MorseCodeEnded()
 {
 	UE_LOG(LogTemp, Display, TEXT("MorseCodeEnded: Light is off"));
 	morseCodeLight->SetVisibility(false);
-	morseCodeBeepSFX->Stop();
+	morseCodeLightSFX->Stop();
 
 }

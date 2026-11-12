@@ -21,7 +21,7 @@ public:
 	UPointLightComponent* morseCodeLight;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UAudioComponent* morseCodeBeepSFX;
+	UAudioComponent* morseCodeLightSFX;
 
 	virtual void MorseCodeOn(float duration, bool bIsDot) override;
 

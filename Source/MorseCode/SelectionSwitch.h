@@ -4,27 +4,34 @@
 #include "GameFramework/Actor.h"
 #include "I_Interactable.h"
 #include "GameplayTagContainer.h"
-#include "SelectionButton.generated.h"
+#include "SelectionSwitch.generated.h"
 
 class UStaticMeshComponent;
+class UAudioComponent;
+class UTimelineComponent;
+class UCurveVector;
 
-DECLARE_DELEGATE_OneParam(FButtonPressedSigniture, ASelectionButton*)
+DECLARE_DELEGATE_OneParam(FButtonPressedSigniture, ASelectionSwitch*)
 
 UCLASS()
-class MORSECODE_API ASelectionButton : public AActor, public II_Interactable
+class MORSECODE_API ASelectionSwitch : public AActor, public II_Interactable
 {
 	GENERATED_BODY()
 	
 public:	
 
-	ASelectionButton();
+	ASelectionSwitch();
 
 	/** When the button is pressed, execute this delegate */
 	FButtonPressedSigniture ButtonPressedEvent;
 
-	/** Main mesh for the button */
+	/** Base mesh for the switch */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* buttonMesh;
+	UStaticMeshComponent* switchBaseMesh;
+
+	/** Handle mesh for the switch */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* switchHandleMesh;
 
 	/** The mesh for the light to indicate if the button is enabled */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -47,6 +54,18 @@ public:
 	/** A check for if the button is presseable or not, updated by the Input Selection System */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	bool bIsEnabled;
+
+	/** Audio component for the on and off sfx */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SFX")
+	UAudioComponent* audioComponent;
+
+	/** The sound effect for when the switch is turned on */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SFX")
+	USoundBase* switchOnSFX;
+
+	/** The sound effect for when the switch is turned on */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SFX")
+	USoundBase* switchOffSFX;
 	
 	/** When interact is called but the player, presses button and calls ButtonPressedEvent */
 	virtual void Interact(AActor* interactor) override;
@@ -73,4 +92,28 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void PlaySFX(bool bIsOn);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
+	UTimelineComponent* switchTimelineComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+	UCurveVector* switchMovementCurve;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+	FRotator startingSwitchRotation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+	bool bSwitchIsDown;
+
+
+	UFUNCTION(BlueprintCallable)
+	void HandleSwitchProgress(FVector value);
+
+
+	//UFUNCTION()
+	//void HandleSwitchFinished();
+
 };
