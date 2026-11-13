@@ -153,22 +153,27 @@ void ASelectionSwitch::Interact(AActor* interactor)
 
 void ASelectionSwitch::SetButtonToDisabled()
 {
-	bIsEnabled = false;
-	UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Disabled"), *GetName());
-	SetLightMaterial("Red");
-	PlaySFX(false);
+	if (bIsEnabled)
+	{
+		bIsEnabled = false;
+		UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Disabled"), *GetName());
+		SetLightMaterial("Red");
+		PlaySFX(false);
+	}
 }
 
 void ASelectionSwitch::SetButtonToEnabled()
 {
-	bIsEnabled = true;
-	UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: %s - Is Enabled"), *GetName());
+	if (!bIsEnabled)
+	{
+		bIsEnabled = true;
+		UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: %s - Is Enabled"), *GetName());
 
-	SetLightMaterial("Orange");
-	audioComponent->Stop();
-	audioComponent->SetSound(switchEnabledSFX);
-	audioComponent->Play();
-	
+		SetLightMaterial("Orange");
+		audioComponent->Stop();
+		audioComponent->SetSound(switchEnabledSFX);
+		audioComponent->Play();
+	}	
 }
 
 void ASelectionSwitch::ButtonPressed()
@@ -222,19 +227,20 @@ void ASelectionSwitch::SetLightMaterial(FName dataTableName)
 
 void ASelectionSwitch::PlaySFX(bool bIsOn)
 {
+
 	audioComponent->Stop();
-	if (bIsOn)
+	if (bIsOn && !bSwitchIsDown)
 	{
 		audioComponent->SetSound(switchOnSFX);
-		switchTimelineComponent->PlayFromStart();
+		AnimateSwitch(true);
 	}
-	else
+	else if (!bIsOn && bSwitchIsDown)
 	{
 		audioComponent->SetSound(switchOffSFX);
-		switchTimelineComponent->ReverseFromEnd();
-
+		AnimateSwitch(false);
 	}
 	audioComponent->Play();
+	//AnimateSwitch(bIsOn);
 }
 
 void ASelectionSwitch::HandleSwitchProgress(FVector value)
@@ -243,7 +249,16 @@ void ASelectionSwitch::HandleSwitchProgress(FVector value)
 	switchHandleMesh->SetRelativeRotation(startingSwitchRotation + offset);
 }
 
-//void ASelectionSwitch::HandleSwitchFinished()
-//{
-//
-//}
+void ASelectionSwitch::AnimateSwitch(bool bTurnOn)
+{
+	if (bTurnOn)
+	{
+		switchTimelineComponent->PlayFromStart();
+		bSwitchIsDown = true;
+	}
+	else
+	{
+		switchTimelineComponent->ReverseFromEnd();
+		bSwitchIsDown = false;
+	}
+}

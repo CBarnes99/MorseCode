@@ -112,12 +112,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 	bool bSwitchIsDown;
 
-
 	UFUNCTION(BlueprintCallable)
 	void HandleSwitchProgress(FVector value);
 
-
-	//UFUNCTION()
-	//void HandleSwitchFinished();
-
+	UFUNCTION(BlueprintCallable)
+	void AnimateSwitch(bool bTurnOn);
 };

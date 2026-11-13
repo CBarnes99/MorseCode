@@ -185,30 +185,6 @@ void AMorseCodeInputSelectionSystem::CheckIfMorseCodeButtonsAreAvailable()
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: No buttons are available!"));
-
-
-
-	//for (ASelectionSwitch* button : buttonArray)
-	//{
-	//	if (button->morseCodeActorUniqueTag == morseCodeData.uniqueTagForMorseCodeActor)
-	//	{
-	//		button->SetButtonToEnabled();
-	//		buttonName = button->GetName();
-	//		break;
-	//	}
-	//}
-	//
-	//for (AMorseCodeActor* actor : morseCodeActorsArray)
-	//{
-	//	if (actor->uniqueActorTag == morseCodeData.uniqueTagForMorseCodeActor)
-	//	{
-	//		actor->SetMorseCodeInformation(morseCodeData.encryptionType, morseCodeData.sentenceToDecode);
-	//		morseCodeActorName = actor->GetName();
-	//		break;
-	//	}
-	//}
-
-	//UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
 }
 
 void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
@@ -222,19 +198,15 @@ void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
 
 	OnAcceptOrRejectRecievedEvent.ExecuteIfBound(bAccept, currentMorseCodeActor->currentString);
 
-	DisableMorseCodeActorsAfterAcceptOrReject();
+	DisableCurrentMorseCodeActors();
 }
 
-void AMorseCodeInputSelectionSystem::DisableMorseCodeActorsAfterAcceptOrReject()
+void AMorseCodeInputSelectionSystem::DisableCurrentMorseCodeActors()
 {
 	if(currentButtonActor)
 	{
 		currentButtonActor->SetButtonToDisabled();
 		currentButtonActor = nullptr;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("DisableMorseCodeActorsAfterAcceptOrReject: CURRENT BUTTON ACTOR NOT VALID"));
 	}
 
 	if (currentMorseCodeActor) 
@@ -242,8 +214,13 @@ void AMorseCodeInputSelectionSystem::DisableMorseCodeActorsAfterAcceptOrReject()
 		currentMorseCodeActor->StartStopMorseCode(false);
 		currentMorseCodeActor = nullptr;
 	}
-	else
+}
+
+void AMorseCodeInputSelectionSystem::DisableAllMorseCodeActors()
+{
+	for (ASelectionSwitch* button : buttonArray)
 	{
-		UE_LOG(LogTemp, Error, TEXT("DisableMorseCodeActorsAfterAcceptOrReject: CURRENT MORSE CODE ACTOR NOT VALID"));
+		button->SetButtonToDisabled();
 	}
+	DisableCurrentMorseCodeActors();
 }

@@ -61,6 +61,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddMorseCodeInformationToPool(F_MorseCodeStringsAndEncryption& morseCodeData);
 
+	UFUNCTION(BlueprintCallable)
+	void DisableAllMorseCodeActors();
+
 protected:
 	
 	virtual void BeginPlay() override;
@@ -93,5 +96,5 @@ protected:
 	void MorseCodeSignalAcceptOrReject(bool bAccept);
 
 	UFUNCTION(BlueprintCallable)
-	void DisableMorseCodeActorsAfterAcceptOrReject();
+	void DisableCurrentMorseCodeActors();
 };
