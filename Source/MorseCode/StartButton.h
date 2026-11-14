@@ -16,6 +16,9 @@ class MORSECODE_API AStartButton : public AActor, public II_Interactable
 public:	
 	AStartButton();
 
+	UFUNCTION(BlueprintCallable)
+	void SetButtonToEnabled();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -31,13 +34,9 @@ protected:
 	virtual void Interact(AActor* interactor) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SetButtonToEnabled();
+	void SetButtonMaterial(FName colourName);
 
 	UFUNCTION(BlueprintCallable)
 	void SetButtonToDisabled();
-
-	UFUNCTION(BlueprintCallable)
-	void SetButtonMaterial(FName colourName);
-
 
 };

@@ -2,7 +2,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameMode_MorseCode.h"
 #include "AcceptOrRejectResults.h"
-#include <Kismet/GameplayStatics.h>
 #include "UObject/ConstructorHelpers.h"
 
 AStartButton::AStartButton()
@@ -26,18 +25,6 @@ AStartButton::AStartButton()
 void AStartButton::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SetButtonToEnabled();
-
-	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), AAcceptOrRejectResults::StaticClass());
-	AAcceptOrRejectResults* AoR = Cast<AAcceptOrRejectResults>(actor);
-	if (!AoR)
-	{
-		UE_LOG(LogTemp, Error, TEXT("BeginPlay: AcceptOrRejectResults actor not found within Start Button!!"));
-		return;
-	}
-	AoR->OnAllMorseCodeFinishedEvent.BindUObject(this, &AStartButton::SetButtonToEnabled);
-
 }
 
 void AStartButton::Interact(AActor* interactor)

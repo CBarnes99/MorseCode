@@ -15,17 +15,17 @@ AMorseCodeInputSelectionSystem::AMorseCodeInputSelectionSystem()
 	baseMesh->SetupAttachment(GetRootComponent());
 
 
-	buttonComponent1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Button 1"));
-	buttonComponent1->SetChildActorClass(ASelectionSwitch::StaticClass());
-	buttonComponent1->SetupAttachment(baseMesh);
+	switchComponent1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Switch 1"));
+	switchComponent1->SetChildActorClass(ASelectionSwitch::StaticClass());
+	switchComponent1->SetupAttachment(baseMesh);
 
-	buttonComponent2 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Button 2"));
-	buttonComponent2->SetChildActorClass(ASelectionSwitch::StaticClass());
-	buttonComponent2->SetupAttachment(baseMesh);
+	switchComponent2 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Switch 2"));
+	switchComponent2->SetChildActorClass(ASelectionSwitch::StaticClass());
+	switchComponent2->SetupAttachment(baseMesh);
 
-	buttonComponent3 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Button 3"));
-	buttonComponent3->SetChildActorClass(ASelectionSwitch::StaticClass());
-	buttonComponent3->SetupAttachment(baseMesh);
+	switchComponent3 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Switch 3"));
+	switchComponent3->SetChildActorClass(ASelectionSwitch::StaticClass());
+	switchComponent3->SetupAttachment(baseMesh);
 	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshFinder(TEXT("/Game/Fab/Tool_Storage_Board/scene/StaticMeshes/scene.scene"));
 	if (meshFinder.Succeeded())
@@ -34,11 +34,6 @@ AMorseCodeInputSelectionSystem::AMorseCodeInputSelectionSystem()
 		UE_LOG(LogTemp, Display, TEXT("AMorseCodeInputSelectionSystem: Static Mesh is set within - %s"), *this->GetName());
 
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("AMorseCodeInputSelectionSystem: Static Mesh not set within - %s"), *this->GetName());
-	}
-
 }
 
 void AMorseCodeInputSelectionSystem::BeginPlay()
@@ -47,7 +42,7 @@ void AMorseCodeInputSelectionSystem::BeginPlay()
 
 	SetAllMorseCodeActors();
 
-	AddButtonsToArrayAndBindDelegates();
+	AddSwitchesToArrayAndBindDelegates();
 }
 
 void AMorseCodeInputSelectionSystem::SetAllMorseCodeActors()
@@ -61,15 +56,15 @@ void AMorseCodeInputSelectionSystem::SetAllMorseCodeActors()
 	}
 }
 
-void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
+void AMorseCodeInputSelectionSystem::AddSwitchesToArrayAndBindDelegates()
 {
-	buttonArray.Add(Cast<ASelectionSwitch>(buttonComponent1->GetChildActor()));
-	buttonArray.Add(Cast<ASelectionSwitch>(buttonComponent2->GetChildActor()));
-	buttonArray.Add(Cast<ASelectionSwitch>(buttonComponent3->GetChildActor()));
+	switchArray.Add(Cast<ASelectionSwitch>(switchComponent1->GetChildActor()));
+	switchArray.Add(Cast<ASelectionSwitch>(switchComponent2->GetChildActor()));
+	switchArray.Add(Cast<ASelectionSwitch>(switchComponent3->GetChildActor()));
 
-	for (ASelectionSwitch* button : buttonArray)
+	for (ASelectionSwitch* currentSwitch : switchArray)
 	{
-		button->ButtonPressedEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode);
+		currentSwitch->SwitchToggledEvent.BindUObject(this, &AMorseCodeInputSelectionSystem::SwitchInteractedToggleMorseCode);
 	}
 
 
@@ -78,7 +73,7 @@ void AMorseCodeInputSelectionSystem::AddButtonsToArrayAndBindDelegates()
 
 	if (!acceptOrRejectActor)
 	{
-		UE_LOG(LogTemp, Error, TEXT("AddButtonsToArrayAndBindDelegates: ACCEPT OR REJECT ACTOR NOT VALID!!"));
+		UE_LOG(LogTemp, Error, TEXT("AddSwitchesToArrayAndBindDelegates: ACCEPT OR REJECT ACTOR NOT VALID!!"));
 		return;
 	}
 
@@ -103,59 +98,60 @@ void AMorseCodeInputSelectionSystem::AddMorseCodeInformationToPool(F_MorseCodeSt
 {
 	morseCodeInformationPool.Add(morseCodeData);
 
-	CheckIfMorseCodeButtonsAreAvailable();
+	CheckIfMorseCodeSwitchesAreAvailable();
 }
 
-void AMorseCodeInputSelectionSystem::ButtonPressedToggleMorseCode(ASelectionSwitch* buttonPressed)
+void AMorseCodeInputSelectionSystem::SwitchInteractedToggleMorseCode(ASelectionSwitch* buttonPressed)
 {
 	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
 	{
 		if (morseCodeActor->uniqueActorTag == buttonPressed->morseCodeActorUniqueTag)
 		{
-			UE_LOG(LogTemp, Display, TEXT("ButtonPressedToggleMorseCode: Correct Tag witin %s"), *morseCodeActor->GetName());
+			UE_LOG(LogTemp, Display, TEXT("SwitchInteractedToggleMorseCode: Correct Tag witin %s"), *morseCodeActor->GetName());
 			currentMorseCodeActor = morseCodeActor;
-			morseCodeActor->StartStopMorseCode(buttonPressed->bIsPressed);
+			morseCodeActor->StartStopMorseCode(buttonPressed->bIsSwitchActive);
 		}
-		else if (buttonPressed->bIsPressed)
+		else if (buttonPressed->bIsSwitchActive)
 		{
 			morseCodeActor->StartStopMorseCode(false);
 		}
 	}
 
-	if (buttonPressed->bIsPressed)
+	if (buttonPressed->bIsSwitchActive)
 	{
-		currentButtonActor = buttonPressed;
-		for (ASelectionSwitch* selectionSwitch : buttonArray)
+		currentSwitchActor = buttonPressed;
+		for (ASelectionSwitch* selectionSwitch : switchArray)
 		{
-			if (selectionSwitch != buttonPressed && selectionSwitch->bIsPressed)
+			if (selectionSwitch != buttonPressed && selectionSwitch->bIsSwitchActive)
 			{
-				selectionSwitch->SetButtonNotPressed();
+				selectionSwitch->SetSwitchNotActive();
 			}
 		}
 	}
 	else
 	{
-		currentButtonActor = nullptr;
+		currentSwitchActor = nullptr;
 	}
 }
 
-void AMorseCodeInputSelectionSystem::CheckIfMorseCodeButtonsAreAvailable()
+void AMorseCodeInputSelectionSystem::CheckIfMorseCodeSwitchesAreAvailable()
 {
+	if (morseCodeInformationPool.Num() < 1)
+		return;
+
 	//For debugging
 	FString buttonName = "Not Set";
 	FString morseCodeActorName = "Not Set";
 
 	bool buttonAvaliable = false;
 
-	//F_MorseCodeStringsAndEncryption data : morseCodeInformationPool
-
 	for (int i = 0; i < morseCodeInformationPool.Num(); i++)
 	{
-		for (ASelectionSwitch* button : buttonArray)
+		for (ASelectionSwitch* button : switchArray)
 		{
-			if (button->morseCodeActorUniqueTag == morseCodeInformationPool[i].uniqueTagForMorseCodeActor && !button->bIsEnabled)
+			if (button->morseCodeActorUniqueTag == morseCodeInformationPool[i].uniqueTagForMorseCodeActor && !button->bIsSwitchEnabled)
 			{
-				button->SetButtonToEnabled();
+				button->SetSwitchEnabledDisabled(true);
 
 				buttonAvaliable = true;
 
@@ -178,19 +174,19 @@ void AMorseCodeInputSelectionSystem::CheckIfMorseCodeButtonsAreAvailable()
 
 				morseCodeInformationPool.RemoveAt(i);
 
-				UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
+				UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeSwitchesAreAvailable: Button Enabled - %s, Morse Code Actor Info Set - %s"), *buttonName, *morseCodeActorName);
 				return;
 			}
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeButtonsAreAvailable: No buttons are available!"));
+	UE_LOG(LogTemp, Warning, TEXT("CheckIfMorseCodeSwitchesAreAvailable: No buttons are available!"));
 }
 
 void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
 {
 
-	if (!currentButtonActor)
+	if (!currentSwitchActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MorseCodeSignalAcceptOrReject: Nothing to Accept Or Reject"));
 		return;
@@ -203,10 +199,10 @@ void AMorseCodeInputSelectionSystem::MorseCodeSignalAcceptOrReject(bool bAccept)
 
 void AMorseCodeInputSelectionSystem::DisableCurrentMorseCodeActors()
 {
-	if(currentButtonActor)
+	if(currentSwitchActor)
 	{
-		currentButtonActor->SetButtonToDisabled();
-		currentButtonActor = nullptr;
+		currentSwitchActor->SetSwitchEnabledDisabled(false);
+		currentSwitchActor = nullptr;
 	}
 
 	if (currentMorseCodeActor) 
@@ -218,9 +214,15 @@ void AMorseCodeInputSelectionSystem::DisableCurrentMorseCodeActors()
 
 void AMorseCodeInputSelectionSystem::DisableAllMorseCodeActors()
 {
-	for (ASelectionSwitch* button : buttonArray)
+	for (ASelectionSwitch* button : switchArray)
 	{
-		button->SetButtonToDisabled();
+		button->SetSwitchEnabledDisabled(false);
 	}
+
+	for (AMorseCodeActor* morseCodeActor : morseCodeActorsArray)
+	{
+		morseCodeActor->MorseCodeOff();
+	}
+
 	DisableCurrentMorseCodeActors();
 }

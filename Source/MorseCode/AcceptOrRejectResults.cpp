@@ -2,6 +2,7 @@
 #include "MorseCodeInputSelectionSystem.h"
 #include "GameMode_MorseCode.h"
 #include <Kismet/GameplayStatics.h>
+#include "TimeManager.h"
 
 AAcceptOrRejectResults::AAcceptOrRejectResults()
 {
@@ -20,8 +21,8 @@ void AAcceptOrRejectResults::BeginPlay()
 
 void AAcceptOrRejectResults::BindDelegates()
 {
-	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), AMorseCodeInputSelectionSystem::StaticClass());
-	morseCodeInputSelectionSystem = Cast<AMorseCodeInputSelectionSystem>(actor);
+	AActor* inputSystem = UGameplayStatics::GetActorOfClass(GetWorld(), AMorseCodeInputSelectionSystem::StaticClass());
+	morseCodeInputSelectionSystem = Cast<AMorseCodeInputSelectionSystem>(inputSystem);
 
 	if (!morseCodeInputSelectionSystem)
 	{
@@ -30,6 +31,17 @@ void AAcceptOrRejectResults::BindDelegates()
 	}
 	morseCodeInputSelectionSystem->OnAcceptOrRejectRecievedEvent.BindUObject(this, &AAcceptOrRejectResults::CompleteAcceptOrReject);
 	morseCodeInputSelectionSystem->AmountOfMorseCodeAndKeyForTodayEvent.BindUObject(this, &AAcceptOrRejectResults::SetAmountOfMorseCodeAndKeyForToday);
+
+
+	AActor* timeActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
+	timeManager = Cast<ATimeManager>(timeActor);
+	if (!timeManager)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BindDelegates: TIME MANAGER NOT BOUND IN - %s"), *GetName());
+		return;
+	}
+	timeManager->DayTimeReachedEvent.AddUObject(this, &AAcceptOrRejectResults::EndDay);
+
 }
 
 void AAcceptOrRejectResults::SetAmountOfMorseCodeAndKeyForToday(int amount, FString key)
@@ -61,19 +73,6 @@ void AAcceptOrRejectResults::CompleteAcceptOrReject(bool bAccept, FString morseC
 		incorrectResults++;
 	}
 
-
-	////contains key and accept, or doesnt contain key and reject - good
-	//if ((morseCodeString.Contains(currentKeyForToday) && bAccept) || (!morseCodeString.Contains(currentKeyForToday) && !bAccept))
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("CompleteAcceptOrReject: CORRECT!!"));
-	//	correctResults++;
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("CompleteAcceptOrReject: INCORRECT!!"));
-	//	incorrectResults++;
-	//}
-
 	CheckIfAllMorseCodeIsComplete();
 }
 
@@ -81,21 +80,15 @@ void AAcceptOrRejectResults::CheckIfAllMorseCodeIsComplete()
 {
 	if (correctResults + incorrectResults == amountOfMorseCodeForToday)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("CheckIfAllMorseCodeIsComplete: All Morse Code done! Amount Correct - %d, Amount Incorrect - %d"), correctResults, incorrectResults);
-		SetTotalCorrectIncorrectValuesEvent.Broadcast(amountOfMorseCodeForToday, correctResults, incorrectResults);
-		ResetResults();
-
-		AGameMode_MorseCode* gameMode = GetWorld()->GetAuthGameMode<AGameMode_MorseCode>();
-
-		if (!gameMode)
-		{
-			UE_LOG(LogTemp, Error, TEXT("CheckIfAllMorseCodeIsComplete: GAME MODE NOT FOUND, CANT RESET DAY!"));
-			return;
-		}
-		//gameMode->SetNewDayInformation();
-		gameMode->CallDayEnded();
-
-		OnAllMorseCodeFinishedEvent.ExecuteIfBound();
-
+		EndDay();
 	}
+}
+
+void AAcceptOrRejectResults::EndDay()
+{
+	UE_LOG(LogTemp, Warning, TEXT("EndDay: Day Ended, Amount Correct - %d, Amount Incorrect - %d, Amount Missed %d"), correctResults, incorrectResults, amountOfMorseCodeForToday - (correctResults + incorrectResults));
+	SetTotalCorrectIncorrectValuesEvent.Broadcast(amountOfMorseCodeForToday, correctResults, incorrectResults);
+	ResetResults();
+
+	OnAllMorseCodeFinishedEvent.ExecuteIfBound();
 }

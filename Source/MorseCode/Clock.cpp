@@ -46,8 +46,6 @@ void AClock::SetTimeManagerAndWidget()
 	}
 
 	clockWidgetComp->SetWidget(clockUIWidget);
-	clockUIWidget->FTimeReachedEvent.BindUObject(this, &AClock::StopClock);
-
 
 	//Get Time Manager and get Delegate to progress time
 	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
@@ -61,6 +59,7 @@ void AClock::SetTimeManagerAndWidget()
 
 	timeManagerActor->OnTimeUpdatedEvent.AddUObject(this, &AClock::ProgressTimeInUI);
 	timeManagerActor->DayResetEvent.AddUObject(this, &AClock::ResetTimeInUI);
+	timeManagerActor->HourToEndDayEvent.AddUObject(this, &AClock::SetHourToEndDay);
 }
 
 void AClock::ProgressTimeInUI()
@@ -73,14 +72,7 @@ void AClock::ResetTimeInUI()
 	clockUIWidget->ResetClock();
 }
 
-void AClock::StopClock()
+void AClock::SetHourToEndDay(int endHour)
 {
-	AGameMode_MorseCode* gameMode = GetWorld()->GetAuthGameMode<AGameMode_MorseCode>();
-
-	if (!gameMode)
-	{
-		UE_LOG(LogTemp, Error, TEXT("StopClock: GAME MODE NOT FOUND IN CLOCK!"));
-		return;
-	}
-	gameMode->CallDayEnded();
+	clockUIWidget->SetHourToEndDay(endHour);
 }

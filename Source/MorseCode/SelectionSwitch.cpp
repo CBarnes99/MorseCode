@@ -24,9 +24,9 @@ ASelectionSwitch::ASelectionSwitch()
 
 	switchTimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("Timneline Component"));
 
-	bIsPressed = false;
-	bIsEnabled = false;
-	bSwitchIsDown = false;
+	//bIsPressed = false;
+	bIsSwitchEnabled = false;
+	bIsSwitchActive = false;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> baseMesh(TEXT("/Game/Fab/electric_switch/StaticMeshes/SM_SwitchBase.SM_SwitchBase"));
 	if (baseMesh.Succeeded())
@@ -94,7 +94,7 @@ ASelectionSwitch::ASelectionSwitch()
 	static ConstructorHelpers::FObjectFinder<UDataTable> lightMaterialsDTCheck(TEXT("/Game/DataTables/DT_SelectionSwitchLightMaterials.DT_SelectionSwitchLightMaterials"));
 	if (lightMaterialsDTCheck.Succeeded())
 	{
-		materialsDataTable = lightMaterialsDTCheck.Object;
+		lightsMaterialsDataTable = lightMaterialsDTCheck.Object;
 	}
 	else
 	{
@@ -117,8 +117,9 @@ void ASelectionSwitch::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bIsEnabled = false;
-	SetLightMaterial("Red");
+	//bIsSwitchEnabled = false;
+	//SetLightMaterial("Red");
+	SetSwitchEnabledDisabled(false);
 
 	FOnTimelineVector switchProgressDelegate;
 	switchProgressDelegate.BindUFunction(this, FName("HandleSwitchProgress"));
@@ -129,80 +130,105 @@ void ASelectionSwitch::BeginPlay()
 void ASelectionSwitch::Interact(AActor* interactor)
 {
 
-	if (bIsEnabled == false)
+	if (bIsSwitchEnabled == false)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Interact: Button - %s - Is Not Enabled!"), *GetName());
+		UE_LOG(LogTemp, Display, TEXT("Interact: Switch - %s - Is Not Enabled!"), *GetName());
 		return;
 	}
 
-	ButtonPressed();
+	SwitchTriggered();
 
-	FString TOF = bIsPressed ? "True" : "False";
+	FString TOF = bIsSwitchEnabled ? "True" : "False";
 	UE_LOG(LogTemp, Display, TEXT("Interact: Interacted With - %s and is now %s"), *GetName(), *TOF);
 	
-	if (ButtonPressedEvent.IsBound())
+	if (SwitchToggledEvent.IsBound())
 	{
-		//ButtonPressedEvent.Execute(morseCodeActorUniqueTag, bIsPressed);
-		ButtonPressedEvent.Execute(this);
+		SwitchToggledEvent.Execute(this);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("Interact: ButtonPressedEvent is not bound within - %s"), *GetName());
+		UE_LOG(LogTemp, Display, TEXT("Interact: SwitchToggledEvent is not bound within - %s"), *GetName());
 	}
 }
 
-void ASelectionSwitch::SetButtonToDisabled()
-{
-	if (bIsEnabled)
-	{
-		bIsEnabled = false;
-		UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Disabled"), *GetName());
-		SetLightMaterial("Red");
-		PlaySFX(false);
-	}
-}
+//void ASelectionSwitch::SetButtonToDisabled()
+//{
+//	if (bIsEnabled)
+//	{
+//		bIsEnabled = false;
+//		UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Disabled"), *GetName());
+//		SetLightMaterial("Red");
+//		PlayAnimationAndSFX(false);
+//	}
+//}
 
-void ASelectionSwitch::SetButtonToEnabled()
+void ASelectionSwitch::SetSwitchEnabledDisabled(bool bSetSwitchEnabled)
 {
-	if (!bIsEnabled)
+	if (bSetSwitchEnabled)
 	{
-		bIsEnabled = true;
-		UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: %s - Is Enabled"), *GetName());
+		//Enable switch if it isnt already enabled
+		if (!bIsSwitchEnabled)
+		{
+			bIsSwitchEnabled = true;
+			UE_LOG(LogTemp, Warning, TEXT("SetButtonToEnabled: %s - Is Enabled"), *GetName());
 
-		SetLightMaterial("Orange");
-		audioComponent->Stop();
-		audioComponent->SetSound(switchEnabledSFX);
-		audioComponent->Play();
-	}	
-}
-
-void ASelectionSwitch::ButtonPressed()
-{
-	if (bIsPressed == true)
-	{
-		SetButtonNotPressed();
+			SetLightMaterial("Orange");
+			audioComponent->Stop();
+			audioComponent->SetSound(switchEnabledSFX);
+			audioComponent->Play();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SetSwitchEnabledDisabled: Switch is already Enabled - %s"), *GetName());
+		}
 	}
 	else
 	{
-		SetButtonPressed();
+		//Disable switch if it isnt already disabled
+		if (bIsSwitchEnabled)
+		{
+			bIsSwitchEnabled = false;
+			UE_LOG(LogTemp, Warning, TEXT("SetButtonToDisabled: %s - Is Disabled"), *GetName());
+			SetLightMaterial("Red");
+			PlayAnimationAndSFX(false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SetSwitchEnabledDisabled: Switch is already Disabled - %s"), *GetName());
+		}
 	}
 }
 
-void ASelectionSwitch::SetButtonNotPressed()
+void ASelectionSwitch::SwitchTriggered()
 {
-	if (bIsEnabled)
+	if (!bIsSwitchActive)
 	{
-		bIsPressed = false;
-		SetLightMaterial("Orange");
-		PlaySFX(false);
+		SetSwitchActive();
+	}
+	else
+	{
+		SetSwitchNotActive();
 	}
 }
 
-void ASelectionSwitch::SetButtonPressed()
+void ASelectionSwitch::SetSwitchNotActive()
 {
-	bIsPressed = true;
-	SetLightMaterial("Green");
-	PlaySFX(true);
+	if (bIsSwitchActive)
+	{
+		bIsSwitchActive = false;
+		SetLightMaterial("Orange");
+		PlayAnimationAndSFX(false);
+	}
+}
+
+void ASelectionSwitch::SetSwitchActive()
+{
+	if (!bIsSwitchActive)
+	{
+		bIsSwitchActive = true;
+		SetLightMaterial("Green");
+		PlayAnimationAndSFX(true);
+	}
 }
 
 void ASelectionSwitch::SetLightMaterial(FName dataTableName)
@@ -213,7 +239,7 @@ void ASelectionSwitch::SetLightMaterial(FName dataTableName)
 		return;
 	}
 
-	F_ButtonLightMaterials* mats = materialsDataTable->FindRow< F_ButtonLightMaterials>(dataTableName, "Context");
+	F_ButtonLightMaterials* mats = lightsMaterialsDataTable->FindRow< F_ButtonLightMaterials>(dataTableName, "Context");
 	if (mats->material)
 	{
 		lightMesh->SetMaterial(1, mats->material);
@@ -225,40 +251,30 @@ void ASelectionSwitch::SetLightMaterial(FName dataTableName)
 
 }
 
-void ASelectionSwitch::PlaySFX(bool bIsOn)
+void ASelectionSwitch::PlayAnimationAndSFX(bool bIsSwitchActivated)
 {
-
 	audioComponent->Stop();
-	if (bIsOn && !bSwitchIsDown)
+
+
+	if (bIsSwitchActivated)
 	{
+		switchTimelineComponent->PlayFromStart();
+		bIsSwitchActive = true;
 		audioComponent->SetSound(switchOnSFX);
-		AnimateSwitch(true);
+
 	}
-	else if (!bIsOn && bSwitchIsDown)
+	else
 	{
+		switchTimelineComponent->ReverseFromEnd();
+		bIsSwitchActive = false;
 		audioComponent->SetSound(switchOffSFX);
-		AnimateSwitch(false);
+
 	}
 	audioComponent->Play();
-	//AnimateSwitch(bIsOn);
 }
 
 void ASelectionSwitch::HandleSwitchProgress(FVector value)
 {
 	FRotator offset(value.Y, value.Z, value.X);
 	switchHandleMesh->SetRelativeRotation(startingSwitchRotation + offset);
-}
-
-void ASelectionSwitch::AnimateSwitch(bool bTurnOn)
-{
-	if (bTurnOn)
-	{
-		switchTimelineComponent->PlayFromStart();
-		bSwitchIsDown = true;
-	}
-	else
-	{
-		switchTimelineComponent->ReverseFromEnd();
-		bSwitchIsDown = false;
-	}
 }

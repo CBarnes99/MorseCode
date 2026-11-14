@@ -32,28 +32,29 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* baseMesh;
 
-	/** The button actor as a child actor */
+	/** The Selection Switch actor as a child actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UChildActorComponent* buttonComponent1;
+	UChildActorComponent* switchComponent1;
 
-	/** The button actor as a child actor */
+	/** The Selection Switch actor as a child actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UChildActorComponent* buttonComponent2;
+	UChildActorComponent* switchComponent2;
 
-	/** The button actor as a child actor */
+	/** The Selection Switch actor as a child actor */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UChildActorComponent* buttonComponent3;
+	UChildActorComponent* switchComponent3;
 
 	/** The actor that accepts or rejects the morse code that is currently being signaled */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AAcceptOrReject* acceptOrRejectActor;
-	/** When button pressed, toggle morse code actor on or off */
-	UFUNCTION(BlueprintCallable)
-	void ButtonPressedToggleMorseCode(ASelectionSwitch* buttonPressed);
 
-	/** When the time manager finds a correct time, sends information to this actor to enable button and sets information in the morse code actor */
+	/** When Switch is interacted with, toggle morse code actor on or off */
 	UFUNCTION(BlueprintCallable)
-	void CheckIfMorseCodeButtonsAreAvailable();
+	void SwitchInteractedToggleMorseCode(ASelectionSwitch* switchToggled);
+
+	/** When the time manager finds a correct time, sends information to this actor to enable switch and sets information in the morse code actor */
+	UFUNCTION(BlueprintCallable)
+	void CheckIfMorseCodeSwitchesAreAvailable();
 
 	UFUNCTION(BlueprintCallable)
 	void SetAmountOfMorseCodeAndKeyForToday(int amount, FString key);
@@ -70,7 +71,7 @@ protected:
 
 	/** An array of all the button actors */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	TArray<ASelectionSwitch*> buttonArray;
+	TArray<ASelectionSwitch*> switchArray;
 
 	/** An array of all the morse code actors */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
@@ -80,13 +81,13 @@ protected:
 	AMorseCodeActor* currentMorseCodeActor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	ASelectionSwitch* currentButtonActor;
+	ASelectionSwitch* currentSwitchActor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
 	TArray<F_MorseCodeStringsAndEncryption> morseCodeInformationPool;
 
 	UFUNCTION(BlueprintCallable)
-	void AddButtonsToArrayAndBindDelegates();
+	void AddSwitchesToArrayAndBindDelegates();
 
 	UFUNCTION(BlueprintCallable)
 	void SetAllMorseCodeActors();

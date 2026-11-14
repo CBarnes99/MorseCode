@@ -48,5 +48,5 @@ protected:
 	void ResetTimeInUI();
 
 	UFUNCTION(BlueprintCallable)
-	void StopClock();
+	void SetHourToEndDay(int endHour);
 };

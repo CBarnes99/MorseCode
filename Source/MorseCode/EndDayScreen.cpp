@@ -8,7 +8,6 @@ AEndDayScreen::AEndDayScreen()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-
 void AEndDayScreen::BeginPlay()
 {
 	Super::BeginPlay();

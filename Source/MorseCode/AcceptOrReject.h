@@ -40,7 +40,7 @@ protected:
 	UDataTable* buttonMaterials;
 
 	UFUNCTION(BlueprintCallable)
-	void ButtonPressed(bool value);
+	void SwitchTriggered(bool value);
 
 	UFUNCTION(BlueprintCallable)
 	void BindButtonDelegates();

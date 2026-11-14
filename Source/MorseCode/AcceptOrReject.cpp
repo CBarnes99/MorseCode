@@ -49,7 +49,7 @@ void AAcceptOrReject::BindButtonDelegates()
 
 	for (AAcceptOrRejectButtons* button : buttonsArray)
 	{
-		button->AcceptOrRejectButtonPressedEvent.BindUObject(this, &AAcceptOrReject::ButtonPressed);
+		button->AcceptOrRejectButtonPressedEvent.BindUObject(this, &AAcceptOrReject::SwitchTriggered);
 
 		if (button->AcceptOrReject)
 		{
@@ -70,7 +70,7 @@ void AAcceptOrReject::BindButtonDelegates()
 	}
 }
 
-void AAcceptOrReject::ButtonPressed(bool value)
+void AAcceptOrReject::SwitchTriggered(bool value)
 {
 	AcceptOrRejectEvent.ExecuteIfBound(value);
 }

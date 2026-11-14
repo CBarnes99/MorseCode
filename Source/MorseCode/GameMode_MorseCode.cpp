@@ -4,6 +4,7 @@
 #include "EndDayScreen.h"
 #include "PlayerController_MorseCode.h"
 #include <Kismet/GameplayStatics.h>
+#include "AcceptOrRejectResults.h"
 
 void AGameMode_MorseCode::StartPlay()
 {
@@ -30,15 +31,26 @@ void AGameMode_MorseCode::StartPlay()
 	endDayScreenActor->StartNextDayButtonPressedEvent.BindUObject(this, &AGameMode_MorseCode::DayStart);
 
 	//Gets and sets time manager actor
-	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
-	timeManager = Cast<ATimeManager>(actor);
-
+	AActor* time = UGameplayStatics::GetActorOfClass(GetWorld(), ATimeManager::StaticClass());
+	timeManager = Cast<ATimeManager>(time);
 	if (!timeManager)
 	{
 		UE_LOG(LogTemp, Error, TEXT("StartPlay: Time Manager Not Set!!"));
 		return;
 	}
-	
+	timeManager->DayTimeReachedEvent.AddUObject(this, &AGameMode_MorseCode::CallDayEnded);
+
+	AActor* aor = UGameplayStatics::GetActorOfClass(GetWorld(), AAcceptOrRejectResults::StaticClass());
+	AAcceptOrRejectResults* AOR = Cast<AAcceptOrRejectResults>(aor);
+	if (!AOR)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartPlay: Accept Or Reject Actor Not Set Not Set!!"));
+		return;
+	}
+	AOR->OnAllMorseCodeFinishedEvent.BindUObject(this, &AGameMode_MorseCode::CallDayEnded);
+
+
+
 	DayStart();
 }
 
@@ -48,10 +60,8 @@ void AGameMode_MorseCode::CallDayEnded()
 	{
 		bHasDayEnded = true;
 		timeManager->StopProgressingTime();
-
 		endDayScreenActor->PlayFadeAnimation(true);
 		EnablePlayerMovement(false);
-
 	}
 }
 

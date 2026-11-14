@@ -4,6 +4,7 @@
 #include "F_MorseCodeStringsAndEncryption.h"
 #include "MorseCodeInputSelectionSystem.h"
 #include <Kismet/GameplayStatics.h>
+#include "StartButton.h"
 
 ATimeManager::ATimeManager()
 {
@@ -12,6 +13,7 @@ ATimeManager::ATimeManager()
 	currentMinute = 0;
 	currentHour = 9;
 	currentDay = 0;
+	hourToEndDay = 17;
 	amountOfSecondsToProgressTime = 1.f;
 	minutesToCheckToAddMorseCode = 5;
 
@@ -32,11 +34,19 @@ void ATimeManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), AMorseCodeInputSelectionSystem::StaticClass());
-	inputSelectionSystem = Cast<AMorseCodeInputSelectionSystem>(actor);
+	AActor* inputSystem = UGameplayStatics::GetActorOfClass(GetWorld(), AMorseCodeInputSelectionSystem::StaticClass());
+	inputSelectionSystem = Cast<AMorseCodeInputSelectionSystem>(inputSystem);
 	if (!inputSelectionSystem)
 	{
-		UE_LOG(LogTemp, Error, TEXT("BeginPlay: Morse Code Input Selection system note set within - %s"), *GetName());
+		UE_LOG(LogTemp, Error, TEXT("BeginPlay: Morse Code Input Selection system not set within - %s"), *GetName());
+		return;
+	}
+
+	AActor* button = UGameplayStatics::GetActorOfClass(GetWorld(), AStartButton::StaticClass());
+	startButton = Cast<AStartButton>(button);
+	if (!startButton)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BeginPlay: Start Button not set within - %s"), *GetName());
 		return;
 	}
 }
@@ -65,6 +75,9 @@ void ATimeManager::SetNewDayInformation()
 	NewKeyEvent.Broadcast(morseCodeData->morseCodeKey);
 
 	inputSelectionSystem->DisableAllMorseCodeActors();
+	startButton->SetButtonToEnabled();
+
+	HourToEndDayEvent.Broadcast(hourToEndDay);
 }
 
 void ATimeManager::StartNextDay()
@@ -101,12 +114,19 @@ void ATimeManager::StartNextDay()
 
 void ATimeManager::ProgressTime()
 {
-	//Function is called on a loop based on this float - amountOfSecondsToProgressTime
+	//Function frequency is called on a loop based on this float - amountOfSecondsToProgressTime
 	currentMinute++;
 	if (currentMinute >= 60)
 	{
 		currentMinute = 0;
 		currentHour++;
+
+		if (currentHour == hourToEndDay)
+		{
+			StopProgressingTime();
+			DayTimeReachedEvent.Broadcast();
+			inputSelectionSystem->DisableAllMorseCodeActors();
+		}
 	}
 	OnTimeUpdatedEvent.Broadcast();
 
@@ -135,7 +155,7 @@ void ATimeManager::ProgressTime()
 
 	if ((currentMinute % minutesToCheckToAddMorseCode == 0 || currentMinute == 0) && !bAddedMorseCode)
 	{
-		inputSelectionSystem->CheckIfMorseCodeButtonsAreAvailable();
+		inputSelectionSystem->CheckIfMorseCodeSwitchesAreAvailable();
 	}
 }
 

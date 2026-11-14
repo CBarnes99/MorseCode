@@ -11,7 +11,7 @@ class UAudioComponent;
 class UTimelineComponent;
 class UCurveVector;
 
-DECLARE_DELEGATE_OneParam(FButtonPressedSigniture, ASelectionSwitch*)
+DECLARE_DELEGATE_OneParam(FSwitchToggledSigniture, ASelectionSwitch*)
 
 UCLASS()
 class MORSECODE_API ASelectionSwitch : public AActor, public II_Interactable
@@ -23,7 +23,7 @@ public:
 	ASelectionSwitch();
 
 	/** When the button is pressed, execute this delegate */
-	FButtonPressedSigniture ButtonPressedEvent;
+	FSwitchToggledSigniture SwitchToggledEvent;
 
 	/** Base mesh for the switch */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -38,7 +38,7 @@ public:
 	UStaticMeshComponent* lightMesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UDataTable* materialsDataTable;
+	UDataTable* lightsMaterialsDataTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UMaterialInstance* currentLightMaterial;
@@ -47,13 +47,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MorseCode")
 	FGameplayTag morseCodeActorUniqueTag;
 
-	/** A check to see if the button is pressed in or not, sent on a delegate to the Input Selection System */
+	/** A check for if the switch is interactable or not, updated by the Input Selection System */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	bool bIsPressed;
+	bool bIsSwitchEnabled;
 
-	/** A check for if the button is presseable or not, updated by the Input Selection System */
+	/** A Check for if the switch us currently in use or not */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MorseCode")
-	bool bIsEnabled;
+	bool bIsSwitchActive;
 
 	/** Audio component for the on and off sfx */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SFX")
@@ -71,23 +71,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SFX")
 	USoundBase* switchEnabledSFX;
 	
-	/** When interact is called but the player, presses button and calls ButtonPressedEvent */
+	/** When interact is called but the player, presses button and calls SwitchToggledEvent */
 	virtual void Interact(AActor* interactor) override;
 
 	UFUNCTION(BlueprintCallable)
-	void SetButtonToEnabled();
+	void SetSwitchEnabledDisabled(bool bSetSwitchEnabled);
 
 	UFUNCTION(BlueprintCallable)
-	void SetButtonToDisabled();
+	void SwitchTriggered();
 
 	UFUNCTION(BlueprintCallable)
-	void ButtonPressed();
+	void SetSwitchNotActive();
 
 	UFUNCTION(BlueprintCallable)
-	void SetButtonNotPressed();
-
-	UFUNCTION(BlueprintCallable)
-	void SetButtonPressed();
+	void SetSwitchActive();
 
 	UFUNCTION(BlueprintCallable)
 	void SetLightMaterial(FName dataTableName);
@@ -98,7 +95,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	void PlaySFX(bool bIsOn);
+	void PlayAnimationAndSFX(bool bIsSwitchActivated);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
 	UTimelineComponent* switchTimelineComponent;
@@ -109,12 +106,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 	FRotator startingSwitchRotation;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-	bool bSwitchIsDown;
-
 	UFUNCTION(BlueprintCallable)
 	void HandleSwitchProgress(FVector value);
-
-	UFUNCTION(BlueprintCallable)
-	void AnimateSwitch(bool bTurnOn);
 };

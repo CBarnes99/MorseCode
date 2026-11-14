@@ -8,6 +8,7 @@ DECLARE_DELEGATE(FOnAllMorseCodeFinishedSigniture)
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FSetTotalCorrectIncorrectValuesSigniture, int /* total */, int /* Correrct */, int /* Incorrect */)
 
 class AMorseCodeInputSelectionSystem;
+class ATimeManager;
 
 UCLASS()
 class MORSECODE_API AAcceptOrRejectResults : public AActor
@@ -22,6 +23,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AMorseCodeInputSelectionSystem* morseCodeInputSelectionSystem;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ATimeManager* timeManager;
 
 protected:
 
@@ -50,6 +54,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void CheckIfAllMorseCodeIsComplete();
+
+	UFUNCTION(BlueprintCallable)
+	void EndDay();
 
 	UFUNCTION(BlueprintCallable)
 	void ResetResults();

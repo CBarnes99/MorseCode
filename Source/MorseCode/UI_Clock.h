@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetClock();
 
+	UFUNCTION(BlueprintCallable)
+	void SetHourToEndDay(int endHour);
+
 	UPROPERTY(meta = (BindWidgetAnim), Transient)
 	UWidgetAnimation* timeFlicker;
 
