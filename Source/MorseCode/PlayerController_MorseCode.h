@@ -40,7 +40,10 @@ protected:
 	UInputAction* lookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	UInputAction* clickAction;
+	UInputAction* LMBAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* RMBAction;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FTransform playerStartingTransform;
@@ -53,7 +56,10 @@ protected:
 	void Look(const FInputActionValue& InputValue);
 
 	UFUNCTION(BlueprintCallable)
-	void Click();
+	void CallStateAction1();
+
+	UFUNCTION(BlueprintCallable)
+	void CallStateAction2();
 
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerToStartingLocation();

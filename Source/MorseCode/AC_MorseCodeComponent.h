@@ -37,11 +37,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetEncryptionTypeAndString(E_EncryptionTypes newEncryptionType, FString stringToEncrypt);
 
-	/** Starts the morse code */
+	/** 
+		Starts the morse code 
+		@param actorStartingMorseCode The actor to start the morse code
+	*/
 	UFUNCTION(BlueprintCallable)
 	void StartMorseCode(AActor* actorStartingMorseCode);
 
-	/** Stops the morse code */
+	/** 
+		Stops the morse code
+		@param actorStoppingMorseCode The actor to stop morse code
+	*/
 	UFUNCTION(BlueprintCallable)
 	void StopMorseCode(AActor* actorStoppingMorseCode);
 
@@ -115,7 +121,6 @@ protected:
 	/** The delay for when you've finished the scentance */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float restartTime;
-
 
 	/** Gets all the information needed for the next character */
 	UFUNCTION(BlueprintCallable)

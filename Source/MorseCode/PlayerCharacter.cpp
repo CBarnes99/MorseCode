@@ -6,6 +6,8 @@
 #include "DrawDebugHelpers.h"
 #include "I_Interactable.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "StickyNoteBin.h"
+#include "StickyNote.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -21,7 +23,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SwitchState(E_PlayerState::MovingState);
+	SwitchState(E_PlayerState::InteractingState);
 }
 
 void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
@@ -30,12 +32,12 @@ void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
 
 	switch (newPlayerState)
 	{
-	case E_PlayerState::MovingState:
-		stateClass = UMovingState::StaticClass();
+	case E_PlayerState::InteractingState:
+		stateClass = UInteractingState::StaticClass();
 		break;
 
-	case E_PlayerState::NotepadState:
-		stateClass = UNotepadState::StaticClass();
+	case E_PlayerState::StickyNoteState:
+		stateClass = UStickyNoteState::StaticClass();
 		break;
 
 	default:
@@ -75,42 +77,6 @@ void APlayerCharacter::Look(const FInputActionValue& InputValue)
 
 }
 
-void APlayerCharacter::Click()
-{
-	FHitResult hit;
-	FVector traceStartLoc = playerCamera->GetComponentLocation();
-	FVector traceEndLoc = traceStartLoc + (playerCamera->GetForwardVector() * 400.f);
-
-	FCollisionQueryParams params;
-	params.AddIgnoredActor(this);
-
-	GetWorld()->LineTraceSingleByChannel(hit, traceStartLoc, traceEndLoc, ECC_Visibility, params);
-	DrawDebugLine(GetWorld(), traceStartLoc, traceEndLoc, FColor::Red, false, 2.f, 1.f, .1f);
-
-	if (hit.bBlockingHit == true)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Click: Trace Hit - %s"), *hit.GetActor()->GetName());
-
-		if (hit.GetActor()->Implements<UI_Interactable>())
-		{
-			II_Interactable* interactableActor = Cast<II_Interactable>(hit.GetActor());
-			interactableActor->Interact(this);
-			return;
-		}
-
-		//For testing with blueprints
-		//if (hit.GetActor()->Implements<UI_Interactable>())
-		//{
-		//	II_Interactable::Execute_BPInteract(hit.GetActor(), this);
-		//	return;
-		//}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Click: No Actor Hit"));
-	}
-}
-
 void APlayerCharacter::StateAction1()
 {
 	if (!currentState)
@@ -131,3 +97,94 @@ void APlayerCharacter::StateAction2()
 	}
 	currentState->StateAction2();
 }
+
+void APlayerCharacter::InteractAction()
+{
+	FHitResult hit;
+	FVector traceStartLoc = playerCamera->GetComponentLocation();
+	FVector traceEndLoc = traceStartLoc + (playerCamera->GetForwardVector() * 400.f);
+
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+
+	GetWorld()->LineTraceSingleByChannel(hit, traceStartLoc, traceEndLoc, ECC_Visibility, params);
+	DrawDebugLine(GetWorld(), traceStartLoc, traceEndLoc, FColor::Red, false, 2.f, 1.f, .1f);
+
+	if (hit.bBlockingHit == true)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InteractAction: Trace Hit - %s"), *hit.GetActor()->GetName());
+
+		if (hit.GetActor()->Implements<UI_Interactable>())
+		{
+			II_Interactable* interactableActor = Cast<II_Interactable>(hit.GetActor());
+			interactableActor->Interact(this);
+			return;
+		}
+
+		//For testing with blueprints
+		//if (hit.GetActor()->Implements<UI_Interactable>())
+		//{
+		//	II_Interactable::Execute_BPInteract(hit.GetActor(), this);
+		//	return;
+		//}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InteractAction: No Actor Hit"));
+	}
+}
+
+void APlayerCharacter::SetStickyNote(AStickyNote* newNote)
+{
+	heldStickyNote = newNote;
+	SwitchState(E_PlayerState::StickyNoteState);
+	UE_LOG(LogTemp, Display, TEXT("SetStickyNote: New note is - %s"), *heldStickyNote->GetName());
+}
+
+void APlayerCharacter::PlaceStickyNote()
+{
+	if (!heldStickyNote)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlaceStickyNote: No held sticky note actor within - %s"), *GetName());
+		return;
+	}
+
+	SwitchState(E_PlayerState::InteractingState);
+
+	FHitResult hit;
+	FVector traceStartLoc = playerCamera->GetComponentLocation();
+	FVector traceEndLoc = traceStartLoc + (playerCamera->GetForwardVector() * 400.f);
+
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+	GetWorld()->LineTraceSingleByChannel(hit, traceStartLoc, traceEndLoc, ECC_Visibility, params);
+
+	if (AStickyNoteBin* bin = Cast<AStickyNoteBin>(hit.GetActor()))
+	{
+		bin->DeleteHeldNote(heldStickyNote);
+		heldStickyNote = nullptr;
+		return;
+	}
+
+	FVector placeLocation = hit.Location;
+	FRotator placeRotation = hit.ImpactNormal.Rotation();
+	placeRotation.Pitch += 90.f;
+	placeRotation.Roll += 180.f;
+	
+	heldStickyNote->SetActorLocationAndRotation(placeLocation, placeRotation);
+	heldStickyNote->SetNoteState(E_StickyNoteState::Placed);
+	heldStickyNote = nullptr;
+}
+
+void APlayerCharacter::StartTyping()
+{
+	if (!heldStickyNote)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartTyping: No held sticky note on - %s"), *GetName());
+		return;
+	}
+
+	heldStickyNote->ToggleTyping();
+}
+
+

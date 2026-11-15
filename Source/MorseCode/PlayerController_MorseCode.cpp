@@ -33,7 +33,9 @@ void APlayerController_MorseCode::SetupInputComponent()
 	{
 		//Input->BindAction(moveAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Move);
 		Input->BindAction(lookAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Look);
-		Input->BindAction(clickAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::Click);
+		Input->BindAction(LMBAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::CallStateAction1);
+		Input->BindAction(RMBAction, ETriggerEvent::Triggered, this, &APlayerController_MorseCode::CallStateAction2);
+		
 	}
 }
 
@@ -62,16 +64,27 @@ void APlayerController_MorseCode::Look(const FInputActionValue& InputValue)
 
 }
 
-void APlayerController_MorseCode::Click()
+void APlayerController_MorseCode::CallStateAction1()
 {
 	if (IsValid(playerCharacter))
 	{
-		//playerCharacter->Click();
 		playerCharacter->StateAction1();
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Click: Player Character Is Not VALID!!"));
+		UE_LOG(LogTemp, Error, TEXT("CallStateAction1: Player Character Is Not VALID!!"));
+	}
+}
+
+void APlayerController_MorseCode::CallStateAction2()
+{
+	if (IsValid(playerCharacter))
+	{
+		playerCharacter->StateAction2();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("CallStateAction2: Player Character Is Not VALID!!"));
 	}
 }
 

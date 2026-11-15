@@ -7,6 +7,7 @@
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
+class AStickyNote;
 
 UCLASS()
 class MORSECODE_API APlayerCharacter : public APawn
@@ -29,7 +30,13 @@ public:
 	void Look(const FInputActionValue& InputValue);
 
 	UFUNCTION(BlueprintCallable)
-	void Click();
+	void InteractAction();
+
+	UFUNCTION(BlueprintCallable)
+	void PlaceStickyNote();
+
+	UFUNCTION(BlueprintCallable)
+	void StartTyping();
 
 	UFUNCTION(BlueprintCallable)
 	void StateAction1();
@@ -37,6 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StateAction2();
 
+	UFUNCTION(BlueprintCallable)
+	void SetStickyNote(AStickyNote* newNote);
 
 protected:
 
@@ -45,4 +54,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UCameraComponent* playerCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	AStickyNote* heldStickyNote;
 };

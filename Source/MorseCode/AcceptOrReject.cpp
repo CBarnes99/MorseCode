@@ -25,12 +25,6 @@ AAcceptOrReject::AAcceptOrReject()
 	{
 		buttonMaterials = buttonMaterialsDT.Object;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("AAcceptOrReject: BUTTON MATERIALS NOT SET IN - %s"), *GetName());
-	}
-
-
 }
 
 

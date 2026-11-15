@@ -25,7 +25,7 @@ AMessageFromBoss::AMessageFromBoss()
 	messageWidgetComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	messageWidgetComp->SetUsingAbsoluteScale(true);
 	messageWidgetComp->SetWindowFocusable(false);
-	messageWidgetComp->SetDrawSize(FVector2D(100.f, 100.f));
+	messageWidgetComp->SetDrawSize(FVector2D(1000.f, 1000.f));
 
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> messagesDataTable(TEXT("/Game/DataTables/DT_DailyMessages.DT_DailyMessages"));

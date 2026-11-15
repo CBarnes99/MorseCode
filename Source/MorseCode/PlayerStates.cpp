@@ -1,40 +1,35 @@
 #include "PlayerStates.h"
 #include "PlayerCharacter.h"
 
-//State 1
-
-FString UMovingState::GetStateName()
+//A State for when you're interafting with the world
+FString UInteractingState::GetStateName()
 {
-	return "UMovingState";
+	return "UInteractingState";
 }
 
-void UMovingState::StateAction1()
+void UInteractingState::StateAction1()
 {
-	playerCharacter->Click();
+	playerCharacter->InteractAction();
 };
 
-void UMovingState::StateAction2()
+void UInteractingState::StateAction2()
 {
-	UE_LOG(LogTemp, Error, TEXT("UMovingState: Do a thing 2"));
+	UE_LOG(LogTemp, Warning, TEXT("StateAction2: No State Action 2 in - %s"), *GetName());
 };
 
 
-
-
-
-//State 2
-
-FString UNotepadState::GetStateName()
+//A State for when you've got a sticky note in hand
+FString UStickyNoteState::GetStateName()
 {
-	return "UNotepadState";
+	return "UStickyNoteState";
 
 }
-void UNotepadState::StateAction1()
+void UStickyNoteState::StateAction1()
 {
-	UE_LOG(LogTemp, Error, TEXT("State 2: Do a thing 1"));
+	playerCharacter->PlaceStickyNote();
 };
 
-void UNotepadState::StateAction2()
+void UStickyNoteState::StateAction2()
 {
-	UE_LOG(LogTemp, Error, TEXT("State 2: Do a thing 2"));
+	playerCharacter->StartTyping();
 };
