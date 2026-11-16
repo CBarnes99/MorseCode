@@ -11,8 +11,8 @@ UAC_MorseCodeComponent::UAC_MorseCodeComponent()
 	dotTimeLength = 0.35f;
 	dashTimeLength = dotTimeLength * 3;
 	delayBetweenDotsAndDashes = dotTimeLength;
-	delayBetweenCharacters = dotTimeLength * 3;
-	delayBetweenWords = dotTimeLength * 7;
+	delayBetweenCharacters = dotTimeLength * 4;
+	delayBetweenWords = dotTimeLength * 9;
 	restartTime = 5.f;
 	delayToStartMorseCode = 2.f;
 

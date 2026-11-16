@@ -119,7 +119,7 @@ protected:
 	float delayBetweenWords;
 
 	/** The delay for when you've finished the scentance */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MorseCodeTiming")
 	float restartTime;
 
 	/** Gets all the information needed for the next character */

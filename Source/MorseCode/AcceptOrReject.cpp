@@ -25,8 +25,13 @@ AAcceptOrReject::AAcceptOrReject()
 	{
 		buttonMaterials = buttonMaterialsDT.Object;
 	}
-}
 
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> mesh(TEXT("/Game/Fab/Megascans/3D/Electrical_Box_tdgtdedda/Medium/tdgtdedda_tier_2/StaticMeshes/tdgtdedda_tier_2.tdgtdedda_tier_2"));
+	if (mesh.Succeeded())
+	{
+		baseMesh->SetStaticMesh(mesh.Object);
+	}
+}
 
 void AAcceptOrReject::BeginPlay()
 {
