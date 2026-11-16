@@ -22,7 +22,7 @@ public:
 	void DayStart();
 
 	UFUNCTION(BlueprintCallable)
-	void SetNewDayInformation();
+	bool SetNewDayInformation();
 
 	UFUNCTION(BlueprintCallable)
 	void CallToSetNewDayWithDelay();
@@ -45,6 +45,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AEndDayScreen* endDayScreenActor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> endTechDemoWidgetClass;
 
 	UFUNCTION(BlueprintCallable)
 	void SetNewDayMorseCodeInfo();

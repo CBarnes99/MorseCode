@@ -51,7 +51,7 @@ void ATimeManager::BeginPlay()
 	}
 }
 
-void ATimeManager::SetNewDayInformation()
+bool ATimeManager::SetNewDayInformation()
 {
 	ResetDayInformation();
 
@@ -68,7 +68,7 @@ void ATimeManager::SetNewDayInformation()
 	if (!morseCodeData)
 	{
 		UE_LOG(LogTemp, Error, TEXT("StartNextDay: NO MORSE CODE DATA FOUND, NO MORSE CODE WILL BE ENABLED FROM NOW ON!"));
-		return;
+		return false;
 	}
 
 	//Sends out the current key as a string
@@ -78,6 +78,7 @@ void ATimeManager::SetNewDayInformation()
 	startButton->SetButtonToEnabled();
 
 	HourToEndDayEvent.Broadcast(hourToEndDay);
+	return true;
 }
 
 void ATimeManager::StartNextDay()

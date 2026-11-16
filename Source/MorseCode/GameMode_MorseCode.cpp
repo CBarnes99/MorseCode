@@ -5,6 +5,7 @@
 #include "PlayerController_MorseCode.h"
 #include <Kismet/GameplayStatics.h>
 #include "AcceptOrRejectResults.h"
+#include "UI_EndTechDemoScreen.h"
 
 void AGameMode_MorseCode::StartPlay()
 {
@@ -71,14 +72,30 @@ void AGameMode_MorseCode::DayStart()
 	{
 		endDayScreenActor->PlayFadeAnimation(false);
 		bHasDayEnded = false;
-		SetNewDayInformation();
-		EnablePlayerMovement(true);
+		if (SetNewDayInformation() == true)
+		{
+			EnablePlayerMovement(true);
+		}
+		else
+		{
+			UUserWidget* widget = CreateWidget(GetWorld(), endTechDemoWidgetClass);
+			UUI_EndTechDemoScreen* endScreen = Cast<UUI_EndTechDemoScreen>(widget);
+			if (!endScreen)
+			{
+				UE_LOG(LogTemp, Error, TEXT("DayStart: EndTechDemo Screen not setup correctly with - %s"), *GetName());
+				return;
+			}
+			endScreen->AddToViewport();
+			endScreen->PlayEndAnimation();
+			playerController->SetShowMouseCursor(true);
+			EnablePlayerMovement(false);
+		}
 	}
 }
 
-void AGameMode_MorseCode::SetNewDayInformation()
+bool AGameMode_MorseCode::SetNewDayInformation()
 {
-	timeManager->SetNewDayInformation();
+	return timeManager->SetNewDayInformation();
 }
 
 void AGameMode_MorseCode::CallToSetNewDayWithDelay()

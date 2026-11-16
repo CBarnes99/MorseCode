@@ -31,7 +31,7 @@ public:
 	FDayTimeReachedSigniture DayTimeReachedEvent;
 
 	UFUNCTION(BlueprintCallable)
-	void SetNewDayInformation();
+	bool SetNewDayInformation();
 
 	UFUNCTION(BlueprintCallable)
 	void StartNextDay();
