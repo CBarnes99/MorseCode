@@ -6,6 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "AcceptOrRejectResults.h"
 #include "UI_EndTechDemoScreen.h"
+#include "UI_TutorialScreen.h"
 
 void AGameMode_MorseCode::StartPlay()
 {
@@ -50,9 +51,35 @@ void AGameMode_MorseCode::StartPlay()
 	}
 	AOR->OnAllMorseCodeFinishedEvent.BindUObject(this, &AGameMode_MorseCode::CallDayEnded);
 
+	if (!bSkipTutorial)
+	{
+		if (!startTechDemoWidgetClass)
+		{
+			UE_LOG(LogTemp, Error, TEXT("StartPlay: startTechDemoWidgetClass Not Set Not Set!!"));
+			return;
+		}
 
-
-	DayStart();
+		UUserWidget* startDemoWidget = CreateWidget(GetWorld(), startTechDemoWidgetClass);
+		if (!startDemoWidget)
+		{
+			UE_LOG(LogTemp, Error, TEXT("StartPlay: Start Tech Demo Widget set correctly - %s"), *GetName());
+			return;
+		}
+		techDemoWidget = Cast<UUI_TutorialScreen>(startDemoWidget);
+		if (!techDemoWidget)
+		{
+			UE_LOG(LogTemp, Error, TEXT("StartPlay: UUI_TutorialScreen Widget Not Cast correctly - %s"), *GetName());
+			return;
+		}
+		techDemoWidget->AddToViewport();
+		techDemoWidget->StartTextDisplayAnimation();
+		playerController->SetShowMouseCursor(true);
+		techDemoWidget->OnTutorialEndEvent.BindUObject(this, &AGameMode_MorseCode::OnTutorialEnd);
+	}
+	else
+	{
+		OnTutorialEnd();
+	}
 }
 
 void AGameMode_MorseCode::CallDayEnded()
@@ -114,4 +141,20 @@ void AGameMode_MorseCode::SetNewDayMorseCodeInfo()
 void AGameMode_MorseCode::EnablePlayerMovement(bool bEnable)
 {
 	playerController->EnableMappingContext(bEnable);
+}
+
+void AGameMode_MorseCode::OnTutorialEnd()
+{
+	UUserWidget* reticalWidget = CreateWidget(GetWorld(), reticalWidgetClass);
+	if (!reticalWidget)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartPlay: Retical not set correctly - %s"), *GetName());
+		return;
+	}
+	reticalWidget->AddToViewport();
+	playerController->SetShowMouseCursor(false);
+	if(techDemoWidget)
+		techDemoWidget->RemoveFromParent();
+
+	DayStart();
 }

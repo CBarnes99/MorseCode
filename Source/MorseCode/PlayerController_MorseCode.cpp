@@ -20,8 +20,7 @@ void APlayerController_MorseCode::OnPossess(APawn* InPawn)
 		UE_LOG(LogTemp, Error, TEXT("OnPossess: Player Character Not Assigned In Player Controller!"));
 	}
 
-	playerStartingTransform = playerCharacter->GetTransform();
-
+	playerStartingRotation = GetControlRotation();
 }
 
 void APlayerController_MorseCode::SetupInputComponent()
@@ -38,18 +37,6 @@ void APlayerController_MorseCode::SetupInputComponent()
 		
 	}
 }
-
-//void APlayerController_MorseCode::Move(const FInputActionValue& InputValue)
-//{
-//	if (IsValid(playerCharacter))
-//	{
-//		playerCharacter->Move(InputValue);		
-//	}
-//	else
-//	{
-//		UE_LOG(LogTemp, Error, TEXT("Move: Player Character Is Not VALID!!"));
-//	}
-//}
 
 void APlayerController_MorseCode::Look(const FInputActionValue& InputValue)
 {
@@ -96,7 +83,7 @@ void APlayerController_MorseCode::EnableMappingContext(bool bEnable)
 		{
 			enhancedInputSubSystem->AddMappingContext(movementMappingContext, 0);
 			SetShowMouseCursor(false);
-			SetPlayerToStartingLocation();
+			SetPlayerLookAtRotation();
 		}
 	}
 	else
@@ -109,13 +96,7 @@ void APlayerController_MorseCode::EnableMappingContext(bool bEnable)
 	}	
 }
 
-void APlayerController_MorseCode::SetPlayerToStartingLocation()
+void APlayerController_MorseCode::SetPlayerLookAtRotation()
 {
-	if (!playerCharacter)
-	{
-		UE_LOG(LogTemp, Error, TEXT("SetPlayerToStartingLocation: PLAYER CHARACTER NOT VALID IN PLAYER CONTROLLER!!"));
-		return;
-	}
-	
-	playerCharacter->SetActorTransform(playerStartingTransform);
+	SetControlRotation(playerStartingRotation);
 }

@@ -33,9 +33,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* movementMappingContext;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	//UInputAction* moveAction;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* lookAction;
 
@@ -46,11 +43,7 @@ protected:
 	UInputAction* RMBAction;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FTransform playerStartingTransform;
-
-
-	//UFUNCTION(BlueprintCallable)
-	//void Move(const FInputActionValue& InputValue);
+	FRotator playerStartingRotation;
 
 	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& InputValue);
@@ -62,5 +55,5 @@ protected:
 	void CallStateAction2();
 
 	UFUNCTION(BlueprintCallable)
-	void SetPlayerToStartingLocation();
+	void SetPlayerLookAtRotation();
 };

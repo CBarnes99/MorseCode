@@ -95,6 +95,7 @@ void AMessageFromBoss::SetCurrentMessageForUI(int currentDay)
 	if (!messageData)
 	{
 		UE_LOG(LogTemp, Error, TEXT("SetCurrentMessageForUI: NO MESSAGE FOUND IN DAILY MESSAGES FOR DAY - %d"), currentDay);
+		return;
 	}
 
 	messageWidget->SetNewMessage(messageData->message);

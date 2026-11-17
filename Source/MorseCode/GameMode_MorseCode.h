@@ -7,6 +7,7 @@
 class ATimeManager;
 class AEndDayScreen;
 class APlayerController_MorseCode;
+class UUI_TutorialScreen;
 
 UCLASS()
 class MORSECODE_API AGameMode_MorseCode : public AGameModeBase
@@ -43,17 +44,32 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bHasDayEnded;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bSkipTutorial;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AEndDayScreen* endDayScreenActor;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> endTechDemoWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> startTechDemoWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UUI_TutorialScreen* techDemoWidget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UUserWidget> reticalWidgetClass;
+
 	UFUNCTION(BlueprintCallable)
 	void SetNewDayMorseCodeInfo();
 
 	UFUNCTION(BlueprintCallable)
 	void EnablePlayerMovement(bool bEnable);
+
+	UFUNCTION(BlueprintCallable)
+	void OnTutorialEnd();
 
 	FTimerHandle DelayForNewDayTimerHandle;
 };

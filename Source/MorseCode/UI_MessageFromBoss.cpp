@@ -27,7 +27,7 @@ void UUI_MessageFromBoss::SetTextBox()
 	if (currentKey.IsEmpty() || currentMessage.IsEmpty())
 		return;
 
-	FString keyText = TEXT("Today's key is - ");
+	FString keyText = TEXT("Key = ");
 	FString combinedMessage = currentMessage + TEXT("\n") + keyText + currentKey;
 
 	textBox->SetText(FText::FromString(combinedMessage));

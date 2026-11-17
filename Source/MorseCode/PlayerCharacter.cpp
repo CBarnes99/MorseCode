@@ -58,17 +58,6 @@ void APlayerCharacter::SwitchState(E_PlayerState newPlayerState)
 	UE_LOG(LogTemp, Warning, TEXT("SwitchState: Current state is now - %s"), *currentState->GetStateName());
 }
 
-
-//void APlayerCharacter::Move(const FInputActionValue& InputValue)
-//{
-//	const FVector2D MovementVector = InputValue.Get<FVector2D>();
-//	const FVector Forward = GetActorForwardVector();
-//	const FVector Right = GetActorRightVector();
-//
-//	AddMovementInput(Forward, MovementVector.Y);
-//	AddMovementInput(Right, MovementVector.X);
-//}
-
 void APlayerCharacter::Look(const FInputActionValue& InputValue)
 {
 	const FVector2D LookAxisVector = InputValue.Get<FVector2D>();
