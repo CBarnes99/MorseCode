@@ -14,5 +14,5 @@ public:
 
 	/** Material for button, as material interface */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInterface* material;
+	UMaterialInterface* material = nullptr;
 };

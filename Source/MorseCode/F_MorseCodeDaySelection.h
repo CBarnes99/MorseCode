@@ -14,10 +14,10 @@ public:
 	
 	/** A data table that holds the morse code informtaion for the in game day */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UDataTable* uniqueDaysMorseCodeData;
+	UDataTable* uniqueDaysMorseCodeData = nullptr;
 
 	/** The key that needs to be included within the morse code string to decode to be accepted */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString morseCodeKey;
+	FString morseCodeKey = " ";
 
 };

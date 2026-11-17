@@ -13,7 +13,7 @@ ALight_MorseCodeActor::ALight_MorseCodeActor()
 	morseCodeLightSFX->SetupAttachment(RootComponent);
 	morseCodeLightSFX->SetAutoActivate(false);
 
-	static ConstructorHelpers::FObjectFinder<USoundWave> morseCodeSFX(TEXT("/Game/SFX/MorseCodeBeep.MorseCodeBeep"));
+	static ConstructorHelpers::FObjectFinder<USoundWave> morseCodeSFX(TEXT("/Game/SFX/SW_LightSwitchOff.SW_LightSwitchOff"));
 	if (morseCodeSFX.Succeeded())
 	{
 		morseCodeLightSFX->SetSound(morseCodeSFX.Object);

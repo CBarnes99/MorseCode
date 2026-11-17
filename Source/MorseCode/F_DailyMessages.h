@@ -14,6 +14,6 @@ public:
 	
 	/** The text that is displayed to the player each day */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString message;
+	FString message = " ";
 
 };

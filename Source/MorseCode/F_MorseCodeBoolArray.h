@@ -14,6 +14,6 @@ public:
 	
 	/** Morse Code Array, True = Dot, False = Dash */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<bool> MorseCodeArray;
+	TArray<bool> MorseCodeArray = {};
 
 };

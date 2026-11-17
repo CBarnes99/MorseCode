@@ -15,19 +15,19 @@ public:
 
 	/** String to convert to morse code */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString sentenceToDecode;
+	FString sentenceToDecode = " ";
 
 	/** The type of encryption the player has to decode */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	E_EncryptionTypes encryptionType;
+	E_EncryptionTypes encryptionType = E_EncryptionTypes::No_Encryption;
 
 	/** What hour does the morse code actor/button activate */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "9", ClampMax = "17"))
-	int hour;
+	int hour = 9;
 
 	/** What minute does the morse code actor/button activate */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0", ClampMax = "59"))
-	int minute;
+	int minute = 0;
 	
 	/** The tag the Morse Code Actor and Button has to activate them */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

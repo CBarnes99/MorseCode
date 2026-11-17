@@ -31,7 +31,7 @@ AStickyNote::AStickyNote()
 
     static ConstructorHelpers::FObjectFinder<UStaticMesh> mesh1(TEXT("/Game/Fab/Post_it_notes/post_it_notes/StaticMeshes/SM_Stickynote1.SM_Stickynote1"));
     static ConstructorHelpers::FObjectFinder<UStaticMesh> mesh2(TEXT("/Game/Fab/Post_it_notes/post_it_notes/StaticMeshes/SM_Stickynote2.SM_Stickynote2"));
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> mesh3(TEXT("/Game/Fab/Post_it_notes/post_it_notes/StaticMeshes/SM_Stickynote1.SM_Stickynote3"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> mesh3(TEXT("/Game/Fab/Post_it_notes/post_it_notes/StaticMeshes/SM_Stickynote3.SM_Stickynote3"));
 
     if (mesh1.Succeeded())
         stickNoteMeshes.Add(mesh1.Object);

@@ -14,6 +14,6 @@ public:
 
 	/** Material for button light, as material interface */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInterface* material;
+	UMaterialInterface* material = nullptr;
 
 };
