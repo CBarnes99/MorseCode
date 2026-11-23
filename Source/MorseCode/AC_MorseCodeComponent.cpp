@@ -163,6 +163,7 @@ void UAC_MorseCodeComponent::MorseCodeCharacterBlinksOff()
 
 void UAC_MorseCodeComponent::MorseCodeNextCharacterCheck()
 {
+	//Check to see if all the blinks have finished for one character
 	if (amountOfFlashesIndex >= morseCodeLightOnDelay.Num())
 	{
 		amountOfFlashesIndex = 0;

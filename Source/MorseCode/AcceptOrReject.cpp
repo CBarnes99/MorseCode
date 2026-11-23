@@ -42,6 +42,7 @@ void AAcceptOrReject::BeginPlay()
 
 void AAcceptOrReject::BindButtonDelegates()
 {
+	//Binds to the on button pressed event and change the button material based on if its an accecpt or reject button
 	buttonsArray.Add(Cast<AAcceptOrRejectButtons>(acceptButton->GetChildActor()));
 	buttonsArray.Add(Cast<AAcceptOrRejectButtons>(rejectButton->GetChildActor()));
 	F_ButtonMaterials* buttonMaterial;

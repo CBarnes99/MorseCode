@@ -28,6 +28,7 @@ void AAcceptOrRejectButtons::Interact(AActor* interactor)
 		return;
 	}
 
+	/** On Interact, call the delegate with their bool to signify if they are the accept or reject button */
 	FString buttonName = AcceptOrReject ? "Accpet Button" : "Reject Button";
 	UE_LOG(LogTemp, Display, TEXT("Interact: Interacted with %s"), *buttonName);
 	AcceptOrRejectButtonPressedEvent.ExecuteIfBound(AcceptOrReject);

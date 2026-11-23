@@ -22,7 +22,7 @@ public:
 
 	UAC_MorseCodeComponent();
 
-	//Delegate Signitures
+	/** Delegates that get bound to the MorseCodeActor the component is attached to */
 	FStartedMorseCodeSigniture StartedMorseCodeEvent;
 	FMorseCodeBlinkStartSigniture MorseCodeBlinkStartEvent;
 	FMorseCodeBlinkEndSigniture MorseCodeBlinkEndEvent;

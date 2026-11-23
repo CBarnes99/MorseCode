@@ -17,12 +17,14 @@ class MORSECODE_API AAcceptOrRejectButtons : public AActor, public II_Interactab
 public:	
 	AAcceptOrRejectButtons();
 
+	/** Delegate bound to AcceptOrReject actor, called when Interact is called */
 	FAcceptOrRejectButtonPressedSigniture AcceptOrRejectButtonPressedEvent;
 
 	/** To determine if the button is the accept or reject button. True is accept, false is reject */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AcceptOrReject")
 	bool AcceptOrReject;
 
+	/** Called when created by AcceptOrReject Actor */
 	UFUNCTION(BlueprintCallable)
 	void SetButtonMaterial(UMaterialInterface* material);
 
@@ -32,7 +34,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-
+	/** Button base mesh */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* buttonMesh;
 };
